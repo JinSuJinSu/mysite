@@ -125,53 +125,7 @@ public class UserDao {
 		return result;
 	}
 	
-	
-	
-	public boolean updateOnlyInformation(UserVo vo) {
-		boolean result = false;
-		Connection conn=null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-			// 3. SQL 준비
-			String sql = "update user set name = ?, gender = ? where no = ?";
-			pstmt = conn.prepareStatement(sql);
-			
-			// 4. 바인딩(binding)
-			pstmt.setString(1,vo.getName());
-			pstmt.setString(2,vo.getGender());
-			pstmt.setLong(3, vo.getNo());
-				
-			// 5. SQL 실행
-			int count = pstmt.executeUpdate(); //update가 된 수를 말한다.
-			result = count==1;
-		}
-		catch (SQLException e) {
-			System.out.println("error : " + e);
-		}
-		finally {
-			// 자원 정리
-			try {
-				if(rs!=null) {
-					rs.close();
-				}
-				if(pstmt!=null) {
-					pstmt.close();
-				}
-				if(conn!=null) {
-					conn.close();
-				}	
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}	
-		}
-		return result;
-	}
-	
-	
-	public boolean updateWithPassword(UserVo vo) {
+	public boolean updateUser(UserVo vo) {
 		boolean result = false;
 		Connection conn=null;
 		PreparedStatement pstmt = null;

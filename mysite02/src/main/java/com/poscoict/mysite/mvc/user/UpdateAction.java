@@ -28,13 +28,11 @@ public class UpdateAction implements Action {
 		
 		if(password==null || password.equals("")) { //비밀번호를 입력하지 않을 경우 회원 정보만 수정
 			authUser.setPassword(originPassword);
-			result = new UserDao().updateOnlyInformation(authUser);
 		}
 		else {
-			authUser.setPassword(password); // 비밀번호를 입력했을 경우 비밀번호와 회원 정보 모두 수정
-			result = new UserDao().updateWithPassword(authUser);
+			authUser.setPassword(password); // 비밀번호를 입력했을 경우 비밀번호와 회원 정보 모두 수정			
 		}
-		
+		result = new UserDao().updateUser(authUser);
 		session.setAttribute("authUser",authUser);
 		if(result) {
 			MvcUtil.redirect(request.getContextPath(), request, response);

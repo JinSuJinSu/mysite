@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.poscoict.web.mvc.Action;
+import com.poscoict.web.util.MvcUtil;
 
 public class LogoutAction implements Action {
 
@@ -17,6 +18,7 @@ public class LogoutAction implements Action {
 		HttpSession session = request.getSession();
 		session.removeAttribute("authUser");
 		session.invalidate();
+		MvcUtil.redirect(request.getContextPath(), request, response);
 		
 	}
 

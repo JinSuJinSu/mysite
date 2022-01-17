@@ -12,13 +12,13 @@
 </head>
 <body>
 	<div id="container">
-		<jsp:include page = "/WEB-INF/views/includes/header.jsp"></jsp:include>
+		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="user">
 				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath}/user">
 					<input type="hidden" name="a" value="update">
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="">
+					<input id="name" name="name" type="text" value="하진수">
 
 					<label class="block-label" for="email">이메일</label>
 					<h4>hjs928@naver.com</h4>
@@ -38,8 +38,8 @@
 				</form>
 			</div>
 		</div>
-		<jsp:include page = "/WEB-INF/views/includes/navigation.jsp"/>
-		<jsp:include page = "/WEB-INF/views/includes/footer.jsp"/>
+		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>
+		<c:import url="/WEB-INF/views/includes/footer.jsp"/>
 	</div>
 </body>
 </html>

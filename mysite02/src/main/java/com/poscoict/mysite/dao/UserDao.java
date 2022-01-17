@@ -73,7 +73,6 @@ public class UserDao {
 	}
 	
 	public UserVo findByEmailAndPassword(String email, String password) {
-		// TODO Auto-generated method stub
 		UserVo result=null;
 		Connection conn=null;
 		PreparedStatement pstmt = null;
@@ -130,17 +129,17 @@ public class UserDao {
 		try {
 			conn = getConnection();
 			// 3. SQL 준비
-			String sql = "update board user set name = ?, password = ?, gender = ? where no = ?";
+			String sql = "update user set name = ?, password = ?, gender = ? where no = ?";
 			pstmt = conn.prepareStatement(sql);
 			
 			// 4. 바인딩(binding)
 			pstmt.setString(1,vo.getName());
 			pstmt.setString(2,vo.getPassword());
-			pstmt.setString(3, vo.getGender());
+			pstmt.setString(3,vo.getGender());
 			pstmt.setLong(4, vo.getNo());
 				
 			// 5. SQL 실행
-			int count = pstmt.executeUpdate(); //insert가 된 수를 말한다.
+			int count = pstmt.executeUpdate(); //update가 된 수를 말한다.
 			result = count==1;
 		}
 		catch (SQLException e) {

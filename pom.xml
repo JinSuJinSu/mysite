@@ -8,22 +8,31 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>mysite02</module>
+		<module>jstel</module>
 	</modules>
-	
-	 <properties>
+
+	<properties>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<project.reporting.outputEncodnig>utf-8</project.reporting.outputEncodnig>
 	</properties>
-	
+
 	<dependencies>
-				<!--  servlet  -->
+
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+
+		<!-- servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
-				<!--  jsp  -->
+		<!-- jsp -->
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
@@ -31,7 +40,7 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
 		<resources>
@@ -71,5 +80,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>

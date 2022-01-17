@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.poscoict.mysite.dao.UserDao;
 import com.poscoict.mysite.vo.UserVo;
@@ -13,7 +14,7 @@ import com.poscoict.web.util.MvcUtil;
 
 public class LoginAction implements Action {
 
-	@Override
+	@Override 
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
@@ -26,8 +27,12 @@ public class LoginAction implements Action {
 			MvcUtil.forward("user/loginform", request, response);
 			return;
 		}
-		
 		// 인증 처리(Session) 처리
+		HttpSession session = request.getSession();
+		session.setAttribute("authUser", authUser);
+		
+		MvcUtil.redirect(request.getContextPath(), request, response);
+		
 	}
 
 }

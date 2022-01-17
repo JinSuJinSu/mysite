@@ -3,6 +3,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.poscoict.mysite.dao.GuestbookDao" %>
 <%@ page import="com.poscoict.mysite.vo.GuestbookVo" %>
+<%
+	pageContext.setAttribute("newline","\n");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,6 +49,8 @@
 								<tr>
 									<td colspan=4>
 										<%= vo.getMessage().replaceAll("\\n","<br>") %>
+<%-- 										<td colspan=4>${fn:replace(vo.message, newline, "<br/>") }</td> --%>
+										
 									</td>
 								</tr>
 <%

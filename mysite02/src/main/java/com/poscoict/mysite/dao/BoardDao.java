@@ -13,28 +13,47 @@ import com.poscoict.mysite.vo.BoardVo;
 public class BoardDao {
 	
 	// 게시판 글 선택
+//	public List<BoardVo> findAll() {
+//		Connection conn = JDBC.getConnection();
+//		List<BoardVo> list = new ArrayList<BoardVo>();
+//		try(Statement stmt = conn.createStatement();){
+//			ResultSet rs = stmt.executeQuery("select b.no, title, name, hit, depth, date_format(reg_date, '%Y-%m-%d %H:%i:%s') reg_date from board b " + 
+//					"join user u on b.user_no=u.no " + 
+//					"order by b.g_no desc, b.o_no asc");
+//			while(rs.next()) {
+//				Long no = rs.getLong("no");
+//				String title = rs.getString("title");
+//				String name = rs.getString("name");
+//				int hit = rs.getInt("hit");
+//				int depth = rs.getInt("depth");
+//				String regDate =  rs.getString("reg_date");
+//				
+//				BoardVo vo = new BoardVo();
+//				vo.setNo(no);
+//				vo.setTitle(title);
+//				vo.setUserName(name);
+//				vo.setHit(hit);
+//				vo.setDepth(depth);
+//				vo.setRegDate(regDate);
+//				list.add(vo);
+//			}
+//			}
+//			 catch (SQLException se) {
+//				System.out.println(se.getMessage());
+//			}
+//			JDBC.close(conn);		
+//		return list;
+//	}
+	
 	public List<BoardVo> findAll() {
 		Connection conn = JDBC.getConnection();
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		try(Statement stmt = conn.createStatement();){
-			ResultSet rs = stmt.executeQuery("select b.no, title, name, hit, depth, date_format(reg_date, '%Y-%m-%d %H:%i:%s') reg_date from board b " + 
-					"join user u on b.user_no=u.no " + 
-					"order by b.g_no desc, b.o_no asc");
+			ResultSet rs = stmt.executeQuery("select no from board");
 			while(rs.next()) {
-				Long no = rs.getLong("no");
-				String title = rs.getString("title");
-				String name = rs.getString("name");
-				int hit = rs.getInt("hit");
-				int depth = rs.getInt("depth");
-				String regDate =  rs.getString("reg_date");
-				
+				Long no = rs.getLong("no");	
 				BoardVo vo = new BoardVo();
 				vo.setNo(no);
-				vo.setTitle(title);
-				vo.setUserName(name);
-				vo.setHit(hit);
-				vo.setDepth(depth);
-				vo.setRegDate(regDate);
 				list.add(vo);
 			}
 			}
@@ -44,6 +63,39 @@ public class BoardDao {
 			JDBC.close(conn);		
 		return list;
 	}
+	
+	// 페이징 처리를 위한 메소드
+		public List<BoardVo> selectPage(int startPage, int endPage) {
+			Connection conn = JDBC.getConnection();
+			List<BoardVo> list = new ArrayList<BoardVo>();
+			try(Statement stmt = conn.createStatement();){
+				ResultSet rs = stmt.executeQuery("select b.no, title, name, hit, depth, date_format(reg_date, '%Y-%m-%d %H:%i:%s') reg_date from board b " + 
+						"join user u on b.user_no=u.no " + 
+						"order by b.g_no desc, b.o_no asc limit " + startPage + "," + endPage);
+				while(rs.next()) {
+					Long no = rs.getLong("no");
+					String title = rs.getString("title");
+					String name = rs.getString("name");
+					int hit = rs.getInt("hit");
+					int depth = rs.getInt("depth");
+					String regDate =  rs.getString("reg_date");
+					
+					BoardVo vo = new BoardVo();
+					vo.setNo(no);
+					vo.setTitle(title);
+					vo.setUserName(name);
+					vo.setHit(hit);
+					vo.setDepth(depth);
+					vo.setRegDate(regDate);
+					list.add(vo);
+				}
+				}
+				 catch (SQLException se) {
+					System.out.println(se.getMessage());
+				}
+				JDBC.close(conn);		
+			return list;
+		}
 	
 	// 특정 번호를 가지고 있는 글을 찾기
 	public BoardVo findOne(int number) {
@@ -70,29 +122,93 @@ public class BoardDao {
 	}
 
 //	
-//	// 특정 글자를 포함하고 있는 글을 찾아준다.
-//	public List<BoardVo> search(String value, String condition){
-//		Connection conn = JDBC.getConnection();
-//		List<BoardVo> list = new ArrayList<BoardVo>();
-//		try (Statement stmt = conn.createStatement()) {
-//			ResultSet rs = stmt.executeQuery("select board_no, user_id, title, content, "
-//					+ "read_count, reply_count, date_format(write_date, '%Y-%m-%d %H:%i:%s') write_date from board "
-//					+ "where " +  condition + " like " + "'%" + value + "%'" + " order by board_no desc");
-//			while(rs.next()) {
-//				BoardVo temp = new BoardVo(rs.getInt("board_no"),rs.getString("user_id"),
-//						rs.getString("title"), rs.getInt("read_count"), rs.getInt("reply_count"),
-//						rs.getString("write_date"));
-//				
-//				list.add(temp);
-//			}
-//			}
-//			 catch (SQLException se) {
-//				System.out.println(se.getMessage());
-//			}
-//			JDBC.close(conn);		
-//		return list;
-//				
-//	}
+	// 특정 글자를 포함하고 있는 글을 찾아준다.
+	public List<BoardVo> search(String value, String condition){
+		Connection conn = JDBC.getConnection();
+		List<BoardVo> list = new ArrayList<BoardVo>();
+		try (Statement stmt = conn.createStatement()) {
+			ResultSet rs = stmt.executeQuery("select no from board "
+					+ "where " +  condition + " like " + "'%" + value + "%'");
+			while(rs.next()) {
+				Long no = rs.getLong("no");		
+				BoardVo vo = new BoardVo();
+				vo.setNo(no);
+			}
+			}
+			 catch (SQLException se) {
+				System.out.println(se.getMessage());
+			}
+			JDBC.close(conn);		
+		return list;			
+	}
+	
+	// 특정 글자를 포함하고 있는 글을 찾아준다.
+//		public List<BoardVo> search(String value, String condition){
+//			Connection conn = JDBC.getConnection();
+//			List<BoardVo> list = new ArrayList<BoardVo>();
+//			try (Statement stmt = conn.createStatement()) {
+//				ResultSet rs = stmt.executeQuery("select b.no, title, name, hit, depth, date_format(reg_date, '%Y-%m-%d %H:%i:%s') reg_date from board b " + 
+//						"join user u on b.user_no=u.no "
+//						+ "where " +  condition + " like " + "'%" + value + "%'" + "order by b.g_no desc, b.o_no asc");
+//				while(rs.next()) {
+//					Long no = rs.getLong("no");
+//					String title = rs.getString("title");
+//					String name = rs.getString("name");
+//					int hit = rs.getInt("hit");
+//					int depth = rs.getInt("depth");
+//					String regDate =  rs.getString("reg_date");
+//					
+//					BoardVo vo = new BoardVo();
+//					vo.setNo(no);
+//					vo.setTitle(title);
+//					vo.setUserName(name);
+//					vo.setHit(hit);
+//					vo.setDepth(depth);
+//					vo.setRegDate(regDate);
+//					list.add(vo);
+//				}
+//				}
+//				 catch (SQLException se) {
+//					System.out.println(se.getMessage());
+//				}
+//				JDBC.close(conn);		
+//			return list;			
+//		}
+	
+	
+	// 특정 글자를 포함하고 있는 글을 페이징 처리해서 찾아준다.
+		public List<BoardVo> limitSearch(String value, String condition, int startPage, int endPage){
+			Connection conn = JDBC.getConnection();
+			List<BoardVo> list = new ArrayList<BoardVo>();
+			try (Statement stmt = conn.createStatement()) {
+				ResultSet rs = stmt.executeQuery("select b.no, title, name, hit, depth, date_format(reg_date, '%Y-%m-%d %H:%i:%s') reg_date from board b " + 
+						"join user u on b.user_no=u.no "
+						+ "where " +  condition + " like " + "'%" + value + "%'" + "order by b.g_no desc, b.o_no asc limit " + startPage + "," + endPage);
+				while(rs.next()) {
+					Long no = rs.getLong("no");
+					String title = rs.getString("title");
+					String name = rs.getString("name");
+					int hit = rs.getInt("hit");
+					int depth = rs.getInt("depth");
+					String regDate =  rs.getString("reg_date");
+					
+					BoardVo vo = new BoardVo();
+					vo.setNo(no);
+					vo.setTitle(title);
+					vo.setUserName(name);
+					vo.setHit(hit);
+					vo.setDepth(depth);
+					vo.setRegDate(regDate);
+					list.add(vo);
+				}
+				}
+				 catch (SQLException se) {
+					System.out.println(se.getMessage());
+				}
+				JDBC.close(conn);		
+			return list;			
+		}
+	
 //	
 //	// 특정 유저의 게시판 내용들만 보여준다.
 //	public List<BoardVo> searchUser(String user){
@@ -221,38 +337,7 @@ public class BoardDao {
 //	}
 
 //	
-	// 페이징 처리를 위한 메소드
-	public List<BoardVo> selectPage(int startPage, int endPage) {
-		Connection conn = JDBC.getConnection();
-		List<BoardVo> list = new ArrayList<BoardVo>();
-		try(Statement stmt = conn.createStatement();){
-			ResultSet rs = stmt.executeQuery("select b.no, title, name, hit, depth, date_format(reg_date, '%Y-%m-%d %H:%i:%s') reg_date from board b " + 
-					"join user u on b.user_no=u.no " + 
-					"order by b.g_no desc, b.o_no asc limit " + startPage + "," + endPage);
-			while(rs.next()) {
-				Long no = rs.getLong("no");
-				String title = rs.getString("title");
-				String name = rs.getString("name");
-				int hit = rs.getInt("hit");
-				int depth = rs.getInt("depth");
-				String regDate =  rs.getString("reg_date");
-				
-				BoardVo vo = new BoardVo();
-				vo.setNo(no);
-				vo.setTitle(title);
-				vo.setUserName(name);
-				vo.setHit(hit);
-				vo.setDepth(depth);
-				vo.setRegDate(regDate);
-				list.add(vo);
-			}
-			}
-			 catch (SQLException se) {
-				System.out.println(se.getMessage());
-			}
-			JDBC.close(conn);		
-		return list;
-	}
+	
 
 		
 	}

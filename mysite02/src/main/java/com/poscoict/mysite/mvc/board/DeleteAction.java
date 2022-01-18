@@ -13,22 +13,6 @@ import com.poscoict.web.mvc.Action;
 import com.poscoict.web.util.MvcUtil;
 
 public class DeleteAction implements Action {
-	
-		// 삭제
-		protected String pageCheck(BoardDao dao, int boardNumber) {
-			List<BoardVo> dataList = dao.findAll();
-			int startNum=1;
-			for(BoardVo value : dataList) {
-				if(value.getNo()==boardNumber) {
-					break;
-				}
-				else {
-					startNum+=1;
-				}
-			}
-			int rangeNumber = (int)Math.ceil((double)startNum/10);
-			return String.valueOf(rangeNumber);
-		}
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,7 +28,7 @@ public class DeleteAction implements Action {
 		
 		// 삭제같은 경우 게시글 번호로 되돌아가기가 불가능하다.
 		List<BoardVo> dataList = dao.findAll();
-		int startNum=1;
+		int startNum=0;
 		for(BoardVo value : dataList) {
 			if(value.getNo()==boardNo) {
 				break;
@@ -53,14 +37,21 @@ public class DeleteAction implements Action {
 				startNum+=1;
 			}
 		}
+		
 		// 그래서 no를 바로 전위치로 가져다 주어야한다.
+		long number;
+		if(startNum==0) { // 맨앞에 있는 값을 삭제할 경우 -1로 인덱스 범위 오류가 난다.
+			number = dataList.get(1).getNo();
+		}
+		else {
+			 number = dataList.get(startNum-1).getNo();
+		}
 		
 		result = dao.delete(boardNo);
-		
 		if(result){
 			// 성공적으로 삭제를 끝냈을 경우
 			// Board Servlet으로 돌아간후 MainAction으로 글을 조회한다.
-			MvcUtil.redirect(request.getContextPath() + "/board?no="+no,request,response);
+			MvcUtil.redirect(request.getContextPath() + "/board?no="+number,request,response);
 		}
 		
 

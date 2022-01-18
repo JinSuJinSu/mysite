@@ -44,6 +44,8 @@ public class ListAction implements Action{
 //		m.put(response, m)
 		String no =  request.getParameter("no"); // 게시글의 번호
 		String page = request.getParameter("page"); // 페이징 처리 번호
+		String condition = request.getParameter("condition"); // 검색을 했는지 안했는지 체크
+		String kwd = request.getParameter("kwd"); // 검색 키워드 값을 가져온다.
 		BoardVo vo = new BoardVo(); // 게시판 vo 객체 생성
 		BoardDao dao = new BoardDao(); // 게시판 dao 객체 생성
 		int boardNo;
@@ -67,13 +69,24 @@ public class ListAction implements Action{
 		}
 		
 		dao = new BoardDao();
-		List<BoardVo> list = dao.findAll();
-		request.setAttribute("list", list);
 		
-		// 페이징에 맞는 게시판 목록 조회
-		List<BoardVo> limitList = dao.selectPage(startPage-1, 10);
-		request.setAttribute("data", limitList);
-		
+		if(condition!=null && !condition.equals("") && kwd!=null && !kwd.equals("")) {
+			List<BoardVo> list = dao.search(kwd,condition);
+			request.setAttribute("list", list);
+			
+			// 페이징에 맞는 게시판 목록 조회
+			List<BoardVo> limitList = dao.limitSearch(kwd, condition, startPage-1, 10);
+			request.setAttribute("data", limitList);
+		}
+		else {
+			List<BoardVo> list = dao.findAll();
+			request.setAttribute("list", list);
+			
+			// 페이징에 맞는 게시판 목록 조회
+			List<BoardVo> limitList = dao.selectPage(startPage-1, 10);
+			request.setAttribute("data", limitList);	
+		}
+
 		MvcUtil.forward("board/list", request, response);
 	}
 

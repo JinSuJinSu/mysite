@@ -19,7 +19,12 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
+				<form id="search_form" action="${pageContext.servletContext.contextPath}/board" method="post">
+				<select name="condition">
+				    <option value="" disabled>검색</option>
+				    <option value="title">제목</option>
+				    <option value="content">내용</option>
+				</select>
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>

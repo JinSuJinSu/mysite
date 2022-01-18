@@ -7,7 +7,7 @@ public class BoardVo {
 	private String title;
 	private String content;
 	private int hit;
-	private int gropuNo;
+	private int groupNo;
 	private int orderNo;
 	private int depth;
 	private String regDate;
@@ -39,11 +39,11 @@ public class BoardVo {
 	public void setHit(int hit) {
 		this.hit = hit;
 	}
-	public int getGropuNo() {
-		return gropuNo;
+	public int getGroupNo() {
+		return groupNo;
 	}
-	public void setGropuNo(int gropuNo) {
-		this.gropuNo = gropuNo;
+	public void setGroupNo(int gropuNo) {
+		this.groupNo = gropuNo;
 	}
 	public int getOrderNo() {
 		return orderNo;
@@ -78,8 +78,8 @@ public class BoardVo {
 	
 	@Override
 	public String toString() {
-		return "BoardVo [no=" + no + ", title=" + title + ", content=" + content + ", hit=" + hit + ", gropuNo="
-				+ gropuNo + ", orderNo=" + orderNo + ", depth=" + depth + ", regDate=" + regDate + ", userNo=" + userNo
+		return "BoardVo [no=" + no + ", title=" + title + ", content=" + content + ", hit=" + hit + ", groupNo="
+				+ groupNo + ", orderNo=" + orderNo + ", depth=" + depth + ", regDate=" + regDate + ", userNo=" + userNo
 				+ ", userName=" + userName + "]";
 	}
 	

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.poscoict.mysite.dao.BoardDao;
 import com.poscoict.mysite.vo.BoardVo;
@@ -27,7 +28,7 @@ public class ListAction implements Action{
 				startNum+=1;
 			}
 		}
-		int rangeNumber = (int)Math.ceil((double)startNum/10);
+		int rangeNumber = (int)Math.ceil((double)startNum/5);
 		return String.valueOf(rangeNumber);
 	}
 
@@ -65,25 +66,29 @@ public class ListAction implements Action{
 		}
 		else {
 			startPage = Integer.valueOf(page);
-			startPage = ((startPage-1)*10)+1;
+			startPage = ((startPage-1)*5)+1;
 		}
-		
+		// 페이징 세션 처리
+		HttpSession session = request.getSession();
+		session.setAttribute("paging", new int[]{startPage});
 		dao = new BoardDao();
 		
 		if(condition!=null && !condition.equals("") && kwd!=null && !kwd.equals("")) {
 			List<BoardVo> list = dao.search(kwd,condition);
 			request.setAttribute("list", list);
+			System.out.println(list);
 			
 			// 페이징에 맞는 게시판 목록 조회
-			List<BoardVo> limitList = dao.limitSearch(kwd, condition, startPage-1, 10);
+			List<BoardVo> limitList = dao.limitSearch(kwd, condition, startPage-1, 5);
 			request.setAttribute("data", limitList);
+			System.out.println(limitList);
 		}
 		else {
 			List<BoardVo> list = dao.findAll();
 			request.setAttribute("list", list);
 			
 			// 페이징에 맞는 게시판 목록 조회
-			List<BoardVo> limitList = dao.selectPage(startPage-1, 10);
+			List<BoardVo> limitList = dao.selectPage(startPage-1, 5);
 			request.setAttribute("data", limitList);	
 		}
 

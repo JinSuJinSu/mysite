@@ -78,10 +78,11 @@
 						   totalPage=list.size();
 					   }
 					   else{
-						   int endPage = (int)Math.ceil((double)totalPage/10);
+						   int endPage = (int)Math.ceil((double)totalPage/5);
 						   for(int i=1; i<=endPage; i++){
 						%>
 							<li><a href="<%= request.getContextPath() %>/board?page=<%=i %>" class="selected"><%=i%></a></li>
+							<li style="display:none">${paging[0]}</li>
 						<%   
 						   }  
 					   }

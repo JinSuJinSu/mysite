@@ -4,6 +4,6 @@
 			<ul>
 				<li><a href="${pageContext.request.contextPath}">하진수</a></li>
 				<li><a href="${pageContext.request.contextPath}/guestbook">방명록</a></li>
-				<li><a href="">게시판</a></li>
+				<li><a href="${pageContext.request.contextPath}/board">게시판</a></li>
 			</ul>
 		</div>

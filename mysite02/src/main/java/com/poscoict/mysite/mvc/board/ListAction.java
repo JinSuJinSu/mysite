@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.poscoict.mysite.dao.BoardDao;
 import com.poscoict.mysite.vo.BoardVo;
@@ -43,7 +44,13 @@ public class ListAction implements Action {
 		BoardVo vo = new BoardVo(); // 게시판 vo 객체 생성
 		BoardDao dao = new BoardDao(); // 게시판 dao 객체 생성
 		int boardNo; // int 타입의 게시글 번호
-
+		
+		// 페이징 처리 전에 조회수 session을 삭제해버린다.
+		HttpSession session = request.getSession();
+		if((int[])session.getAttribute("read")!=null) {
+			session.invalidate(); // 로그아웃 시 유저 정보를 가지고 있는 세션을 삭제해준다.
+		}
+			
 		if (no != null) {
 			boardNo = Integer.valueOf(no); // 게시글 번호 받아오기
 			if(reply==null) {

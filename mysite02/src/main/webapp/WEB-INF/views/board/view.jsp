@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>  
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<% pageContext.setAttribute("newline", "\n"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +27,7 @@
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								${readvo.content}
+								${fn:replace(readvo.content, newline, "<br/>")}
 							</div>
 						</td>
 					</tr>

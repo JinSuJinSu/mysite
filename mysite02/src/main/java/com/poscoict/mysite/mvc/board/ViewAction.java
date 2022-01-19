@@ -20,10 +20,13 @@ public class ViewAction implements Action {
 		String no = request.getParameter("no");
 		BoardVo vo = new BoardVo();
 		BoardDao dao = new BoardDao();
+		boolean result = false;
 		
 		if(no!=null) {
 			int boardNo = Integer.valueOf(no);
 			vo = dao.findOne(boardNo);
+			vo.setHit(vo.getHit()+1);; // 게시물을 볼때마다 조회수를 1개 증가시킨다.
+			result = dao.readUpdate(vo); // 증가시킨 조회수를 update해서 db 데이터를 수정해준다.
 		}
 		request.setAttribute("readvo", vo);
 		MvcUtil.forward("board/view",request,response);

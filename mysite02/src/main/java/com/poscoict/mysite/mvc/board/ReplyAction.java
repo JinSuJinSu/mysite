@@ -48,7 +48,7 @@ public class ReplyAction implements Action {
 			insertResult = dao.replyWrite(vo);			
 			
 			if(updateResult && insertResult) {
-				MvcUtil.redirect(request.getContextPath() + "/board?no=" + no,request,response);
+				MvcUtil.redirect(request.getContextPath() + "/board?reply=reply&no=" + no,request,response);
 			}
 		}
 		

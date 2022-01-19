@@ -46,10 +46,7 @@
 						<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
 						</c:if>
 						<c:choose>
-							<c:when test="${empty authUser && vo.title!='삭제된 글입니다.'}">
-								<a href="${pageContext.servletContext.contextPath}/user?a=loginform">${vo.title}</a>
-							</c:when>
-							<c:when test="${not empty authUser && vo.title!='삭제된 글입니다.'}">
+							<c:when test="${vo.title!='삭제된 글입니다.'}">
 								<a href="${pageContext.servletContext.contextPath}/board?a=view&no=${vo.no}">${vo.title}</a>
 							</c:when>
 							<c:otherwise>

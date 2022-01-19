@@ -37,7 +37,9 @@
 					<c:if test = "${authUser.name == readvo.userName}">
 					<a href="${pageContext.request.contextPath}/board?a=modifyform&no=${readvo.no}">글수정</a>
 					</c:if>
+					<c:if test = "${not empty authUser}">
 					<a href="${pageContext.request.contextPath}/board?a=replyform&no=${readvo.no}">댓글 달기</a>
+					</c:if>
 				</div>
 			</div>
 		</div>

@@ -48,7 +48,7 @@ public class ListAction implements Action {
 		// 페이징 처리 전에 조회수 session을 삭제해버린다.
 		HttpSession session = request.getSession();
 		if((int[])session.getAttribute("read")!=null) {
-			session.invalidate(); // 로그아웃 시 유저 정보를 가지고 있는 세션을 삭제해준다.
+			session.removeAttribute("read"); // 조회가 끝나면 해당 세션을 제거해준다.
 		}
 			
 		if (no != null) {

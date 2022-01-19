@@ -42,32 +42,21 @@
 					<c:forEach items="${data}" var="vo">
 					<tr>
 						<td>${vo.no}</td>
+						<td style="text-align:left; padding-left:${(vo.depth-1)*20}px;">
+						<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
+						</c:if>
 						<c:choose>
 							<c:when test="${empty authUser && vo.title!='삭제된 글입니다.'}">
-								<td style="text-align:left; padding-left:${(vo.depth-1)*20}px;">
-								<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
-								</c:if>
-								<a href="${pageContext.servletContext.contextPath}/user?a=loginform">${vo.title}</a></td>
-							</c:when>
-							<c:when test="${empty authUser && vo.title=='삭제된 글입니다.'}">
-								<td style="text-align:left; padding-left:${(vo.depth-1)*20}px; color:'gray'">
-								<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
-								</c:if>
-								${vo.title}</td>
+								<a href="${pageContext.servletContext.contextPath}/user?a=loginform">${vo.title}</a>
 							</c:when>
 							<c:when test="${not empty authUser && vo.title!='삭제된 글입니다.'}">
-								<td style="text-align:left; padding-left:${(vo.depth-1)*20}px;">
-								<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
-								</c:if>
-								<a href="${pageContext.servletContext.contextPath}/board?a=view&no=${vo.no}">${vo.title}</a></td>
+								<a href="${pageContext.servletContext.contextPath}/board?a=view&no=${vo.no}">${vo.title}</a>
 							</c:when>
 							<c:otherwise>
-								<td style="text-align:left; padding-left:${(vo.depth-1)*20}px; color:'gray'">
-								<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
-								</c:if>
-								${vo.title}</td>
+								${vo.title}
 							</c:otherwise>		
 						</c:choose>
+						</td>
 						
 						<td>${vo.userName}</td>
 						<td>${vo.hit}</td>
@@ -84,6 +73,8 @@
 				
 				<!-- pager 추가 -->
 				<div class="pager">
+<!-- 					paging[0]= startpage, paging[1]= endpage
+					search[0]= search_condition(title,content), search[1]=search_keyword -->
 					<ul>
 						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]-5}">◀</a></li>
 						<c:forEach  begin="${paging[0]}" end="${paging[1]}"  step="1" var="page">

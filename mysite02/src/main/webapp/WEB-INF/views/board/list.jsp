@@ -72,10 +72,12 @@
 						<td>${vo.userName}</td>
 						<td>${vo.hit}</td>
 						<td>${vo.regDate}</td>
+						<td>
 						<c:if test = "${authUser.name == vo.userName && vo.title != '삭제된 글입니다.'}">
-						<td><a href="${pageContext.servletContext.contextPath}/board?a=delete&no=${vo.no}" class="del" 
-						style='background-image: url("${pageContext.servletContext.contextPath}/assets/images/recycle.png")'>삭제</a></td>
+						<a href="${pageContext.servletContext.contextPath}/board?a=delete&no=${vo.no}" class="del" 
+						style='background-image: url("${pageContext.servletContext.contextPath}/assets/images/recycle.png")'>삭제</a>
 						</c:if>
+						</td>
 					</tr>
 					</c:forEach>
 				</table>
@@ -85,8 +87,8 @@
 					<ul>
 						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]-5}">◀</a></li>
 						<c:forEach  begin="${paging[0]}" end="${paging[1]}"  step="1" var="page">
-							<li><a href="${pageContext.servletContext.contextPath}/board?page=${page}&condition=${search[0]}&kwd=${search[1]}" 
-							class="selected">${page}</a></li>
+							<li class="selected">
+							<a href="${pageContext.servletContext.contextPath}/board?page=${page}&condition=${search[0]}&kwd=${search[1]}">${page}</a></li>
 						</c:forEach>
 						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]+5}">▶</a></li>
 					</ul>

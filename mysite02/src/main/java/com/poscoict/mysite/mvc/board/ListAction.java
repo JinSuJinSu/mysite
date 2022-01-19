@@ -1,7 +1,6 @@
 package com.poscoict.mysite.mvc.board;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -52,6 +51,7 @@ public class ListAction implements Action {
 			}
 			page = pageCheck(dao, boardNo, reply); // 게시판에 있는 내용을 확인하고 돌아갔을 때 그 시점에 맞는 페이지 번호로 돌아가야 한다.
 		}
+		// condition과 kwd가 비어 있을 경우는 전체 조회가 된다.
 		if(condition==null || condition.equals("")) {
 			condition="title";
 		}
@@ -61,16 +61,14 @@ public class ListAction implements Action {
 		// mysql limit 시작 포인트
 		int startPoint;
 		dao = new BoardDao();
-		List<BoardVo> list = new ArrayList<>();
-		list = dao.findAll(kwd, condition);
+		List<BoardVo> list = dao.findAll(kwd, condition);
 		request.setAttribute("list", list);
 
 		// 페이징에 맞는 게시판 목록 조회
-		if (page == null) {
+		if (page == null || page.equals("1")) {
 			startPoint = 1;
-		} else if (page.equals("1")) {
-			startPoint = 1;
-		} else {
+		}
+		 else {
 			startPoint = Integer.valueOf(page);
 			if (startPoint < 1) {
 				startPoint = 1;
@@ -82,15 +80,15 @@ public class ListAction implements Action {
 			}
 		}
 
-		List<BoardVo> limitList = dao.limitFind(kwd, condition, startPoint - 1, 5);
+		List<BoardVo> limitList = dao.limitFind(kwd, condition, startPoint - 1, 5); // mysql limit 시작은 1이 아닌 0부터이다.
 		request.setAttribute("data", limitList);
-		int startPage = 1 + (5 * (startPoint / 25));
-		int endPage = startPage + 4;
+		int startPage = 1 + (5 * (startPoint / 25)); // 페이지 1개당 글 5개고 화살표를 클릭했을 때 startPage는 5가 증가한다. 
+		int endPage = startPage + 4; // 화살표 양옆으로 5개씩 페이지가 나오므로 endpage는 stratpage에 4를 더해준다.
 		if (endPage >= Math.ceil((double) list.size() / 5)) {
-			endPage = (int) Math.ceil((double) list.size() / 5);
+			endPage = (int) Math.ceil((double) list.size() / 5); // 예들 들어 게시글의 개수가 36개일 때 최대 페이지 번호는 8이고 그보다 크면 범위를 벗어나므로 최대페이지 번호로 고정시킨다.
 		}
-		request.setAttribute("paging", new int[] { startPage, endPage });
-		request.setAttribute("search", new String[] { condition, kwd });
+		request.setAttribute("paging", new int[] { startPage, endPage }); // 페이징 reuqest 객체
+		request.setAttribute("search", new String[] { condition, kwd }); // 검색 reuqest 객체
 		MvcUtil.forward("board/list", request, response);
 	}
 

@@ -72,12 +72,13 @@ public class BoardDao {
 		Connection conn = JDBC.getConnection();
 		BoardVo vo=null;
 		try (Statement stmt = conn.createStatement()) {
-			ResultSet rs = stmt.executeQuery("select title, content, b.no, name, g_no, o_no, depth from board b " + 
+			ResultSet rs = stmt.executeQuery("select title, content, hit, b.no, name, g_no, o_no, depth from board b " + 
 					"join user u on b.user_no=u.no where b.no=" + number);
 			if (rs.next()) {
 				vo = new BoardVo();
 				vo.setTitle(rs.getString("title"));
 				vo.setContent(rs.getString("content"));
+				vo.setHit(rs.getInt("hit"));
 				vo.setNo((long) number);
 				vo.setUserName(rs.getString("name"));
 				vo.setGroupNo(rs.getInt("g_no"));

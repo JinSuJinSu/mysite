@@ -76,12 +76,12 @@
 <!-- 					paging[0]= startpage, paging[1]= endpage
 					search[0]= search_condition(title,content), search[1]=search_keyword -->
 					<ul>
-						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]-5}">◀</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]-5}&condition=${search[0]}&kwd=${search[1]}">◀</a></li>
 						<c:forEach  begin="${paging[0]}" end="${paging[1]}"  step="1" var="page">
 							<li class="selected">
 							<a href="${pageContext.servletContext.contextPath}/board?page=${page}&condition=${search[0]}&kwd=${search[1]}">${page}</a></li>
 						</c:forEach>
-						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]+5}">▶</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]+5}&condition=${search[0]}&kwd=${search[1]}">▶</a></li>
 					</ul>
 				</div>					
 				<!-- pager 추가 -->		

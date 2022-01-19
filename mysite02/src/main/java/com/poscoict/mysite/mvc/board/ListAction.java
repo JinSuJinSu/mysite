@@ -51,6 +51,7 @@ public class ListAction implements Action {
 			}
 			page = pageCheck(dao, boardNo, reply); // 게시판에 있는 내용을 확인하고 돌아갔을 때 그 시점에 맞는 페이지 번호로 돌아가야 한다.
 		}
+
 		// condition과 kwd가 비어 있을 경우는 전체 조회가 된다.
 		if(condition==null || condition.equals("")) {
 			condition="title";
@@ -75,7 +76,12 @@ public class ListAction implements Action {
 			} else {
 				startPoint = ((startPoint - 1) * 5) + 1;
 				if (Integer.valueOf(page) > Math.ceil((double) list.size() / 5)) {// 페이징 화살표 처리시 startpoint가 list의 범위를 벗어날 경우
-					startPoint = 5*(list.size() / 5)+1;
+					if(list.size()%5==0) { // 전체 개시물의 수가 5로 나눴을 때 딱 맞을 경우
+						startPoint = list.size()-4;
+					}
+					else {
+						startPoint = 5*(list.size() / 5)+1;
+					}			
 				}
 			}
 		}
@@ -87,6 +93,7 @@ public class ListAction implements Action {
 		if (endPage >= Math.ceil((double) list.size() / 5)) {
 			endPage = (int) Math.ceil((double) list.size() / 5); // 예들 들어 게시글의 개수가 36개일 때 최대 페이지 번호는 8이고 그보다 크면 범위를 벗어나므로 최대페이지 번호로 고정시킨다.
 		}
+		
 		request.setAttribute("paging", new int[] { startPage, endPage }); // 페이징 reuqest 객체
 		request.setAttribute("search", new String[] { condition, kwd }); // 검색 reuqest 객체
 		MvcUtil.forward("board/list", request, response);

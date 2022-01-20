@@ -74,14 +74,14 @@
 					search[0]= search_condition(title,content), search[1]=search_keyword -->
 					<ul>
 						<c:if test = "${paging[0]!=1}">
-						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]-5}&condition=${search[0]}&kwd=${search[1]}">◀</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?arrow=arrow&page=${paging[0]-5}&condition=${search[0]}&kwd=${search[1]}">◀</a></li>
 						</c:if>
 						<c:forEach  begin="${paging[0]}" end="${paging[1]}"  step="1" var="page">
 							<li class="selected">
 							<a href="${pageContext.servletContext.contextPath}/board?page=${page}&condition=${search[0]}&kwd=${search[1]}">${page}</a></li>
 						</c:forEach>
 						<c:if test = "${paging[1]!=Math.ceil(list.size()/5)}">
-						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]+5}&condition=${search[0]}&kwd=${search[1]}">▶</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?arrow=arrow&page=${paging[0]+5}&condition=${search[0]}&kwd=${search[1]}">▶</a></li>
 						</c:if>
 					</ul>
 				</div>					

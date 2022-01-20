@@ -38,12 +38,15 @@ public class ListAction implements Action {
 
 		String no = request.getParameter("no"); // 게시글의 번호
 		String page = request.getParameter("page"); // 페이징 처리 번호
+		String arrow = request.getParameter("arrow"); // 화살표 클릭 체크
 		String condition = request.getParameter("condition"); // 검색을 했는지 안했는지 체크
 		String kwd = request.getParameter("kwd"); // 검색 키워드 값을 가져온다.
 		String reply = request.getParameter("reply"); // 댓글을 달았는지 안달았는지 확인하기 위해 필요한 메소드
 		BoardVo vo = new BoardVo(); // 게시판 vo 객체 생성
 		BoardDao dao = new BoardDao(); // 게시판 dao 객체 생성
 		int boardNo; // int 타입의 게시글 번호
+		
+		System.out.println(arrow);
 		
 		// 페이징 처리 전에 조회수 session을 삭제해버린다.
 		HttpSession session = request.getSession();
@@ -92,15 +95,24 @@ public class ListAction implements Action {
 				}
 			}
 		}
-
-		List<BoardVo> limitList = dao.limitFind(kwd, condition, startPoint - 1, 5); // mysql limit 시작은 1이 아닌 0부터이다.
-		request.setAttribute("data", limitList);
+		
 		int startPage = 1 + (5 * (startPoint / 25)); // 페이지 1개당 글 5개고 화살표를 클릭했을 때 startPage는 5가 증가한다. 
 		int endPage = startPage + 4; // 화살표 양옆으로 5개씩 페이지가 나오므로 endpage는 stratpage에 4를 더해준다.
 		if (endPage >= Math.ceil((double) list.size() / 5)) {
 			endPage = (int) Math.ceil((double) list.size() / 5); // 예들 들어 게시글의 개수가 36개일 때 최대 페이지 번호는 8이고 그보다 크면 범위를 벗어나므로 최대페이지 번호로 고정시킨다.
 		}
 		
+		if(arrow==null || arrow.equals("")) {
+			session.setAttribute("point",new int[]{startPoint}); // point 세션을 만들어 mysql limit 시작점을 저장해준다.
+		}
+		else {
+			int[] point = (int[])session.getAttribute("point"); // 화살표를 클릭했을때 세션에 저장되어 있는 포인트를 가져와서 게시판 글 목록이 바뀌는 것을 방지
+			startPoint=point[0];
+			System.out.println(startPoint);
+		}
+		
+		List<BoardVo> limitList = dao.limitFind(kwd, condition, startPoint - 1, 5); // mysql limit 시작은 1이 아닌 0부터이다.
+		request.setAttribute("data", limitList); // 게시판 글목록 request 객체
 		request.setAttribute("paging", new int[] { startPage, endPage }); // 페이징 reuqest 객체
 		request.setAttribute("search", new String[] { condition, kwd }); // 검색 reuqest 객체
 		MvcUtil.forward("board/list", request, response);

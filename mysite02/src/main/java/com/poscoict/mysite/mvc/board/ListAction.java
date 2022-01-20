@@ -1,6 +1,7 @@
 package com.poscoict.mysite.mvc.board;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -74,6 +75,11 @@ public class ListAction implements Action {
 		dao = new BoardDao();
 		List<BoardVo> list = dao.findAll(kwd, condition);
 		request.setAttribute("list", list);
+		List<Long> noList = new ArrayList<>(); // 게시글을 개수에 맞게 번호로 출력하기 위해 필요
+		for(BoardVo board: list) {
+			noList.add(board.getNo());
+		}
+		request.setAttribute("noList", noList);
 
 		// 페이징에 맞는 게시판 목록 조회
 		if (page == null || page.equals("1")) {

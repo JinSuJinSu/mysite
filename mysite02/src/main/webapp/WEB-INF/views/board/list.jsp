@@ -39,9 +39,10 @@
 						<th>&nbsp;</th>
 					</tr>
 					
-					<c:forEach items="${data}" var="vo">
+					<c:forEach items="${data}" var="vo" varStatus="status">
 					<tr>
-						<td>${vo.no}</td>
+						<!-- limit로 5개씩 정렬된 게시글을 나타낼 때 list 사이즈에서 데이터 테이블 no 컬럼의 값의 위치를 구해 빼면 순서대로 글 번호를 출력할 수 있다.-->
+						<td>${list.size()-noList.indexOf(vo.no)}</td>
 						<td style="text-align:left; padding-left:${(vo.depth-1)*20}px;">
 						<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
 						</c:if>

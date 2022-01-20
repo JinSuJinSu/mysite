@@ -46,9 +46,7 @@ public class ListAction implements Action {
 		BoardVo vo = new BoardVo(); // 게시판 vo 객체 생성
 		BoardDao dao = new BoardDao(); // 게시판 dao 객체 생성
 		int boardNo; // int 타입의 게시글 번호
-		
-		System.out.println(arrow);
-		
+
 		// 페이징 처리 전에 조회수 session을 삭제해버린다.
 		HttpSession session = request.getSession();
 		if((int[])session.getAttribute("read")!=null) {

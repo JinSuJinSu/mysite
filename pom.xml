@@ -9,6 +9,7 @@
 	<modules>
 		<module>mysite02</module>
 		<module>jstel</module>
+		<module>mysite03</module>
 	</modules>
 
 	<properties>

@@ -108,7 +108,6 @@ public class ListAction implements Action {
 		else {
 			int[] point = (int[])session.getAttribute("point"); // 화살표를 클릭했을때 세션에 저장되어 있는 포인트를 가져와서 게시판 글 목록이 바뀌는 것을 방지
 			startPoint=point[0];
-			System.out.println(startPoint);
 		}
 		
 		List<BoardVo> limitList = dao.limitFind(kwd, condition, startPoint - 1, 5); // mysql limit 시작은 1이 아닌 0부터이다.

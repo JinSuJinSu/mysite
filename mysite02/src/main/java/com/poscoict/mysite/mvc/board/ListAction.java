@@ -39,7 +39,6 @@ public class ListAction implements Action {
 
 		String no = request.getParameter("no"); // 게시글의 번호
 		String page = request.getParameter("page"); // 페이징 처리 번호
-		String arrow = request.getParameter("arrow"); // 화살표 클릭 체크
 		String position = request.getParameter("position"); // 페이지 번호 클릭 체크
 		String condition = request.getParameter("condition"); // 검색을 했는지 안했는지 체크
 		String kwd = request.getParameter("kwd"); // 검색 키워드 값을 가져온다.
@@ -78,9 +77,11 @@ public class ListAction implements Action {
 			noList.add(board.getNo());
 		}
 		request.setAttribute("noList", noList);
+		
 
 		// 페이징에 맞는 게시판 목록 조회
 		if (page == null || page.equals("1")) {
+			page = "1";
 			startPoint = 1;
 		}
 		else {
@@ -89,13 +90,14 @@ public class ListAction implements Action {
 		}
 		
 		int startPage = 1; // 시작 페이지 지정
-		if((arrow==null || arrow.equals(""))) {
-			if((position!=null)) {
-				startPage = Integer.valueOf(position); 	
-		}
+		int currentPage = 1; // 현재 페이지 지정
+		if(position!=null){ //화살표를 클릭하지 않았을 때
+			startPage = Integer.valueOf(position);
+			currentPage = Integer.valueOf(page);
 		}
 		else {
-			startPage = Integer.valueOf(page);  // 화살표를 클릭했을 시 시작페이지는 (1,5) 증가한다.
+			startPage = 1+5*(startPoint/25);  // 화살표를 클릭했을 시 시작페이지는 1, 6, 11 이런식으로 되고 페이징 시작점이 5개씩이다.
+			currentPage = startPage;	
 		}
 		
 		int endPage = startPage + 4; // 화살표 양옆으로 5개씩 페이지가 나오므로 endpage는 stratpage에 4를 더해준다.
@@ -105,7 +107,7 @@ public class ListAction implements Action {
 		
 		List<BoardVo> limitList = dao.limitFind(kwd, condition, startPoint - 1, 5); // mysql limit 시작은 1이 아닌 0부터이다.
 		request.setAttribute("data", limitList); // 게시판 글목록 request 객체
-		request.setAttribute("paging", new int[] { startPage, endPage }); // 페이징 reuqest 객체
+		request.setAttribute("paging", new int[] { startPage, currentPage, endPage }); // 페이징 reuqest 객체
 		request.setAttribute("search", new String[] { condition, kwd }); // 검색 reuqest 객체
 		MvcUtil.forward("board/list", request, response);
 	}

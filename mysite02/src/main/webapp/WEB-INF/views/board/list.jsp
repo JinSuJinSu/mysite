@@ -74,21 +74,23 @@
 <!-- 					paging[0]= startpage, paging[1]= endpage
 					search[0]= search_condition(title,content), search[1]=search_keyword -->
 					<ul>
-						<c:if test = "${paging[0]>5}">
-						<li><a href="${pageContext.servletContext.contextPath}/board?arrow=arrow&page=${paging[0]-5}&condition=${search[0]}&kwd=${search[1]}">◀◀</a></li>
-						</c:if>
 						<c:if test = "${paging[0]!=1}">
-						<li><a href="${pageContext.servletContext.contextPath}/board?arrow=arrow&page=${paging[0]-1}&condition=${search[0]}&kwd=${search[1]}">◀</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]-5}&condition=${search[0]}&kwd=${search[1]}">◀</a></li>
 						</c:if>
-						<c:forEach  begin="${paging[0]}" end="${paging[1]}"  step="1" var="page">
-							<li class="selected">
-							<a href="${pageContext.servletContext.contextPath}/board?position=${paging[0]}&page=${page}&condition=${search[0]}&kwd=${search[1]}">${page}</a></li>
+						<c:forEach  begin="${paging[0]}" end="${paging[2]}"  step="1" var="page">
+							<c:choose>
+								<c:when test="${page==paging[1]}">
+									<li class="selected">
+									<a href="${pageContext.servletContext.contextPath}/board?position=${paging[0]}&page=${page}&condition=${search[0]}&kwd=${search[1]}">${page}</a></li>
+								</c:when>
+								<c:otherwise>
+								<li>
+								<a href="${pageContext.servletContext.contextPath}/board?position=${paging[0]}&page=${page}&condition=${search[0]}&kwd=${search[1]}">${page}</a></li>
+								</c:otherwise>	
+							</c:choose>		
 						</c:forEach>
-						<c:if test = "${Math.ceil(list.size()/5) -paging[0]>=5}">
-						<li><a href="${pageContext.servletContext.contextPath}/board?arrow=arrow&page=${paging[0]+1}&condition=${search[0]}&kwd=${search[1]}">▶</a></li>
-						</c:if>
-						<c:if test = "${Math.ceil(list.size()/5) -paging[0]>=5}">
-						<li><a href="${pageContext.servletContext.contextPath}/board?arrow=arrow&page=${paging[0]+5}&condition=${search[0]}&kwd=${search[1]}">▶▶</a></li>
+						<c:if test = "${paging[2]!=Math.ceil(list.size()/5)}">
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]+5}&condition=${search[0]}&kwd=${search[1]}">▶</a></li>
 						</c:if>
 					</ul>
 				</div>					

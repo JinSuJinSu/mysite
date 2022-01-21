@@ -21,8 +21,8 @@ public class BoardDao {
 					+ "where " +  condition + " like " + "'%" + value + "%'"  
 					+ "order by g_no desc, o_no asc");
 			while(rs.next()) {
-				Long no = rs.getLong("no");		
 				BoardVo vo = new BoardVo();
+				Long no = rs.getLong("no");	
 				vo.setNo(no);
 				list.add(vo);
 			}

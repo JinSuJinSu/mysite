@@ -26,7 +26,7 @@ public class ReplyAction implements Action {
 		String content = request.getParameter("content");
 		
 		if(title==null || content==null || title.equals("") || content.equals("")) {
-			MvcUtil.redirect(request.getContextPath() + "/board",request,response);
+			MvcUtil.redirect(request.getContextPath() + "/board?no=" + no + "&back=back",request,response);
 		}
 		else {
 			BoardVo vo = new BoardVo();
@@ -48,7 +48,7 @@ public class ReplyAction implements Action {
 			insertResult = dao.replyWrite(vo);			
 			
 			if(updateResult && insertResult) {
-				MvcUtil.redirect(request.getContextPath() + "/board?reply=reply&no=" + no,request,response);
+				MvcUtil.redirect(request.getContextPath() + "/board?reply=reply&no=" + no + "&back=back",request,response);
 			}
 		}
 		

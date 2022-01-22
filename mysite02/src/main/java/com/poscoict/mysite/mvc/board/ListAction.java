@@ -40,6 +40,7 @@ public class ListAction implements Action {
 		String no = request.getParameter("no"); // 게시글의 번호
 		String page = request.getParameter("page"); // 페이징 처리 번호
 		String position = request.getParameter("position"); // 페이지 번호 클릭 체크
+		String back = request.getParameter("back"); // 편집 작업 후 해당 번호로 돌아오기 위해 필요한 값
 		String condition = request.getParameter("condition"); // 검색을 했는지 안했는지 체크
 		String kwd = request.getParameter("kwd"); // 검색 키워드 값을 가져온다.
 		String reply = request.getParameter("reply"); // 댓글을 달았는지 안달았는지 확인하기 위해 필요한 메소드
@@ -94,6 +95,10 @@ public class ListAction implements Action {
 		if(position!=null){ //화살표를 클릭하지 않았을 때
 			startPage = Integer.valueOf(position);
 			currentPage = Integer.valueOf(page);
+		}
+		else if(back!=null) { //편집 후 해당 페이지 번호로 돌아올 때(글 새로 쓰기 제외)
+			startPage = 1+5*(startPoint/25);
+			currentPage = 1 + (startPoint/5);
 		}
 		else {
 			startPage = 1+5*(startPoint/25);  // 화살표를 클릭했을 시 시작페이지는 1, 6, 11 이런식으로 되고 페이징 시작점이 5개씩이다.

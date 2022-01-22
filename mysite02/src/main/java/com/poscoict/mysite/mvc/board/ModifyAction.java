@@ -24,7 +24,7 @@ public class ModifyAction implements Action {
 		boolean result=false;
 		
 		if(title==null || content==null || title.equals("") || content.equals("")) {
-			MvcUtil.redirect(request.getContextPath() + "/board",request,response);
+			MvcUtil.redirect(request.getContextPath() + "/board?no=" + no + "&back=back",request,response);
 		}
 		else {
 			if(no!=null) {
@@ -35,7 +35,7 @@ public class ModifyAction implements Action {
 				result = dao.modify(vo);
 			}
 			if(result) {
-				MvcUtil.redirect(request.getContextPath() + "/board?no=" + no,request,response);
+				MvcUtil.redirect(request.getContextPath() + "/board?no=" + no + "&back=back",request,response);
 			}
 		}
 		

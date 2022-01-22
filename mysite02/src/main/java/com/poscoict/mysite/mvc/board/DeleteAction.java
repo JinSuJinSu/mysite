@@ -59,7 +59,7 @@ public class DeleteAction implements Action {
 		if(result){
 			// 성공적으로 삭제를 끝냈을 경우
 			// Board Servlet으로 돌아간후 MainAction으로 글을 조회한다.
-			MvcUtil.redirect(request.getContextPath() + "/board?no="+no,request,response);
+			MvcUtil.redirect(request.getContextPath() + "/board?no="+no + "&back=back",request,response);
 		}
 		
 	}

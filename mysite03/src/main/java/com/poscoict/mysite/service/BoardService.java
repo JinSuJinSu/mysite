@@ -29,11 +29,6 @@ public class BoardService {
 	// 답글 달기
 	public boolean replyContents(BoardVo vo, HttpSession session) {
 		boolean result=false;
-		System.out.println(vo.getContent());
-		System.out.println(vo.getTitle());
-		System.out.println(vo.getDepth());
-		System.out.println(vo.getGroupNo());
-		System.out.println(vo.getOrderNo());
 		if(vo.getTitle()!=null && !vo.getTitle().equals("") && vo.getContent()!=null && !vo.getContent().equals("")) {
 			boolean updateResult=false;
 			boolean insertResult=false;
@@ -75,20 +70,41 @@ public class BoardService {
 	}
 	
 	// 글 삭제
-	public boolean deleteContents(Long no) {
+	public long deleteContents(Long no) {
+		long boardNumber=no;
 		BoardVo vo = boardRepository.findOne(no);
 		int cnt = boardRepository.replyCheck(vo.getGroupNo());
 		boolean result=false;
-		System.out.println(vo.getNo());
 		if(cnt>1) {
 			// 댓글이 달려 있는 글일 경우
 			result = boardRepository.deleteUpdate(vo.getNo());
 		}
 		else {
+			// 댓글이 달려 있지 않은 글일 경우
+			// 삭제같은 경우 게시글 번호로 되돌아가기가 불가능하다.
+			List<BoardVo> dataList = boardRepository.findAll("","title");
+			int startNum=0;
+			for(BoardVo value : dataList) {
+				if(value.getNo()==no) {
+					break;
+				}
+				else {
+					startNum+=1;
+				}
+			}
+			// 그래서 no를 바로 전위치로 가져다 주어야한다.
+			long number;
+			if(startNum==0) { // 맨앞에 있는 값을 삭제할 경우 -1로 인덱스 범위 오류가 난다.
+				number = dataList.get(1).getNo();
+			}
+			else {
+				 number = dataList.get(startNum-1).getNo();
+			}
 			result = boardRepository.delete(no);
+			boardNumber = number;
+			
 		}
-		System.out.println(result);
-		return result;
+		return boardNumber;
 	}
 	
 	// 전체글 가져오기
@@ -113,7 +129,6 @@ public class BoardService {
 			
 	}
 	
-	// 게시판으로 돌아가기(3페이지에서 조회,수정,삭제, 취소 작업을 했을 때 페이지 선택 상태로 그대로 돌아가야 한다.)
 
 	
 

@@ -61,7 +61,7 @@
 						<td>${vo.regDate}</td>
 						<td>
 						<c:if test = "${authUser.name == vo.userName && vo.title != '삭제된 글입니다.'}">
-						<a href="${pageContext.servletContext.contextPath}/board/delete/${vo.no}" class="del" 
+						<a href="${pageContext.servletContext.contextPath}/board/delete/?no=${vo.no}&back=back" class="del" 
 						style='background-image: url("${pageContext.servletContext.contextPath}/assets/images/recycle.png")'>삭제</a>
 						</c:if>
 						</td>

@@ -21,12 +21,10 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
-	private BoardRepository boardRepository;
 	
 	// 페이징 처리를 위해 필요한 함수
-	protected int pageCheck(BoardRepository boardRepository, long boardNumber, String reply) {
+	protected int pageCheck(long boardNumber, String reply) {
 		List<BoardVo> dataList = boardService.allContents("","title");
-		System.out.println(dataList);
 		int startNum = 1;
 		for (BoardVo value : dataList) {
 			if (value.getNo() == boardNumber) {
@@ -39,7 +37,6 @@ public class BoardController {
 			startNum += 1;
 		}
 		int rangeNumber = (int) Math.ceil((double) startNum / 5);
-		System.out.println(rangeNumber);
 		return rangeNumber;
 	}
 	
@@ -54,13 +51,12 @@ public class BoardController {
 			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 			@RequestParam(value="reply", required=true, defaultValue="") String reply)
 	{
-	
-		System.out.println("no : " + no);
-		System.out.println("back : "  +  back);
 		
 		if((long[])session.getAttribute("read")!=null) {
 			session.removeAttribute("read"); // 조회가 끝나면 해당 세션을 제거해준다.
 		}
+		System.out.println(no);
+		System.out.println(back);
 		
 		// condition과 kwd가 비어 있을 경우는 전체 조회가 된다.
 		if(condition==null || condition.equals("")) {
@@ -79,10 +75,7 @@ public class BoardController {
 		// mysql limit 시작 포인트
 		int startPoint=1;
 		if(no!=0) {
-			System.out.println("page : " +  page);
-			System.out.println("reply : "  + reply);
-			page = pageCheck(boardRepository, no, reply); // 게시판에 있는 내용을 확인하고 돌아갔을 때 그 시점에 맞는 페이지 번호로 돌아가야 한다.
-			System.out.println("page : " +  page);
+			page = pageCheck(no, reply); // 게시판에 있는 내용을 확인하고 돌아갔을 때 그 시점에 맞는 페이지 번호로 돌아가야 한다.
 		}
 		// 페이징에 맞는 게시판 목록 조회
 		if(page>1) {
@@ -163,10 +156,12 @@ public class BoardController {
 	}
 	
 	//게시판 글 삭제
-	@RequestMapping(value = "/delete/{no}", method = RequestMethod.GET)
-	public String delete(@PathVariable("no") Long no){
-		boolean result=boardService.deleteContents(no);
-		return "redirect:/board";
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String delete(
+			@RequestParam(value="no", required=true, defaultValue="0") Long no,
+			@RequestParam(value="back", required=true, defaultValue="") String back){
+		long boardNumber=boardService.deleteContents(no);
+		return "redirect:/board?no=" + boardNumber + "&back=back";
 	}
 	
 	
@@ -186,10 +181,6 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-
-	
-	
-	
 		
-	}
+}
 	

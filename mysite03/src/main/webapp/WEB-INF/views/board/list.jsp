@@ -48,7 +48,7 @@
 						</c:if>
 						<c:choose>
 							<c:when test="${vo.title!='삭제된 글입니다.'}">
-								<a href="${pageContext.servletContext.contextPath}/board?a=view&no=${vo.no}">${vo.title}</a>
+								<a href="${pageContext.servletContext.contextPath}/board/view/${vo.no}">${vo.title}</a>
 							</c:when>
 							<c:otherwise>
 								${vo.title}
@@ -61,7 +61,7 @@
 						<td>${vo.regDate}</td>
 						<td>
 						<c:if test = "${authUser.name == vo.userName && vo.title != '삭제된 글입니다.'}">
-						<a href="${pageContext.servletContext.contextPath}/board?a=delete&no=${vo.no}" class="del" 
+						<a href="${pageContext.servletContext.contextPath}/board/delete/${vo.no}" class="del" 
 						style='background-image: url("${pageContext.servletContext.contextPath}/assets/images/recycle.png")'>삭제</a>
 						</c:if>
 						</td>
@@ -98,10 +98,10 @@
 				<div class="bottom">
 					<c:choose>
 						<c:when test="${empty authUser}">
-							<a href="${pageContext.servletContext.contextPath}/user?a=loginform">글쓰기</a>
+							<a href="${pageContext.servletContext.contextPath}/user/login">글쓰기</a>
 						</c:when>
 						<c:otherwise>
-							<a href="${pageContext.servletContext.contextPath}/board?a=writeform" id="new-book">글쓰기</a>
+							<a href="${pageContext.servletContext.contextPath}/board/write" id="new-book">글쓰기</a>
 						</c:otherwise>		
 					</c:choose>
 				</div>				

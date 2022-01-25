@@ -65,7 +65,7 @@
 	<!-- 특정 번호의 게시판 글 선택 -->
 	<select id="findOne" parameterType="long" resultType="boardvo">
 	<![CDATA[
-			select title, content, hit, b.no, name, groupNo, orderNo, depth, userNo from board b 
+			select title, content, hit, b.no, name, groupNo, orderNo, depth from board b 
 			join user u on b.userNo=u.no where b.no=#{no}
 	]]>
 	</select>

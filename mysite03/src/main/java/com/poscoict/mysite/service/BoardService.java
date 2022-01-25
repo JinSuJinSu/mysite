@@ -37,6 +37,7 @@ public class BoardService {
 			boolean updateResult=false;
 			boolean insertResult=false;
 			UserVo authUser = (UserVo)session.getAttribute("authUser");
+			vo.setUserNo(authUser.getNo());
 			updateResult = boardRepository.replyUpdate(vo.getOrderNo(), vo.getGroupNo());
 			insertResult = boardRepository.replyInsert(vo);	
 			result=true;

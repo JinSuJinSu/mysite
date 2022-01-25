@@ -50,6 +50,7 @@ public class BoardRepository {
 	// 특정 번호를 가지고 있는 글을 찾기
 	public BoardVo findOne(long no) {
 		BoardVo vo=sqlSession.selectOne("board.findOne", no);
+		System.out.println(vo);
 		return vo;
 	}
 	

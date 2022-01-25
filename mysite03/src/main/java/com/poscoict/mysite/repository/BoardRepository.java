@@ -14,19 +14,17 @@ import com.poscoict.mysite.vo.BoardVo;
 @Repository
 public class BoardRepository {
 	
-	// 모든 글을 조회한다(검색 포함)
-		public List<BoardVo> findAll(String value, String condition){
+	// 모든 글의 게시판 번호를 조회한다.(검색 포함)
+		public List<Long> findAll(String value, String kwd){
 			Connection conn = JDBC.getConnection();
-			List<BoardVo> list = new ArrayList<BoardVo>();
+			List<Long> list = new ArrayList<Long>();
 			try (Statement stmt = conn.createStatement()) {
 				ResultSet rs = stmt.executeQuery("select no from board "
-						+ "where " +  condition + " like " + "'%" + value + "%'"  
+						+ "where " +  kwd + " like " + "'%" + value + "%'"  
 						+ "order by g_no desc, o_no asc");
 				while(rs.next()) {
-					BoardVo vo = new BoardVo();
 					Long no = rs.getLong("no");	
-					vo.setNo(no);
-					list.add(vo);
+					list.add(no);
 				}
 				}
 				 catch (SQLException se) {
@@ -38,13 +36,13 @@ public class BoardRepository {
 	
 	
 	// 특정 범위의 글을 페이징 처리해서보여줌(검색 포함)
-	public List<BoardVo> limitFind(String value, String condition, int startPoint){
+	public List<BoardVo> limitFind(String value, String condition, int currentPage){
 		Connection conn = JDBC.getConnection();
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		try (Statement stmt = conn.createStatement()) {
 			ResultSet rs = stmt.executeQuery("select b.no, title, name, hit, depth, date_format(reg_date, '%Y-%m-%d %H:%i:%s') reg_date from board b " + 
 					"join user u on b.user_no=u.no "
-					+ "where " +  condition + " like " + "'%" + value + "%'" + "order by b.g_no desc, b.o_no asc limit " + startPoint + ",5");
+					+ "where " +  condition + " like " + "'%" + value + "%'" + "order by b.g_no desc, b.o_no asc limit " + (currentPage-1)*5 + ",5");
 			while(rs.next()) {
 				Long no = rs.getLong("no");
 				String title = rs.getString("title");

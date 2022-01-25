@@ -21,12 +21,12 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.servletContext.contextPath}/board" method="post">
-				<select name="condition">
+				<select name="kwd">
 				    <option value="" disabled>검색</option>
 				    <option value="title">제목</option>
 				    <option value="content">내용</option>
 				</select>
-					<input type="text" id="kwd" name="kwd" value="">
+					<input type="text" id="value" name="value" value="">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -39,69 +39,67 @@
 						<th>&nbsp;</th>
 					</tr>
 					
-					<c:forEach items="${data}" var="vo" varStatus="status">
+					<c:forEach items="${map.list}" var="vo" varStatus="status">
 					<tr>
 						<!-- limit로 5개씩 정렬된 게시글을 나타낼 때 list 사이즈에서 데이터 테이블 no 컬럼의 값의 위치를 구해 빼면 순서대로 글 번호를 출력할 수 있다.-->
-						<td>${list.size()-noList.indexOf(vo.no)}</td>
+						<td>${map.totalList.size()-map.totalList.indexOf(vo.no)}</td>
 						<td style="text-align:left; padding-left:${(vo.depth-1)*20}px;">
 						<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
 						</c:if>
 						<c:choose>
 							<c:when test="${vo.title!='삭제된 글입니다.'}">
-								<a href="${pageContext.servletContext.contextPath}/board/view/${vo.no}">${vo.title}</a>
+								<a href="${pageContext.servletContext.contextPath}/board/view/${vo.no}?page=${map.currentPage}&kwd=${map.kwd}&value=${map.value}">${vo.title}</a>
 							</c:when>
 							<c:otherwise>
 								${vo.title}
 							</c:otherwise>		
 						</c:choose>
-						</td>
-						
+						</td>				
 						<td>${vo.userName}</td>
 						<td>${vo.hit}</td>
 						<td>${vo.regDate}</td>
 						<td>
 						<c:if test = "${authUser.name == vo.userName && vo.title != '삭제된 글입니다.'}">
-						<a href="${pageContext.servletContext.contextPath}/board/delete/?no=${vo.no}&back=back" class="del" 
+						<a href="${pageContext.servletContext.contextPath}/board/delete/${vo.no}?page=${map.currentPage}&kwd=${map.kwd}&value=${map.value}" class="del" 
 						style='background-image: url("${pageContext.servletContext.contextPath}/assets/images/recycle.png")'>삭제</a>
 						</c:if>
 						</td>
 					</tr>
 					</c:forEach>
 				</table>
-				
-				<!-- pager 추가 -->
+									<!-- pager 추가 -->
 				<div class="pager">
 <!-- 					paging[0]= startpage, paging[1]= endpage
 					search[0]= search_condition(title,content), search[1]=search_keyword -->
 					<ul>
-						<c:if test = "${paging[0]!=1}">
-						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]-5}&condition=${search[0]}&kwd=${search[1]}">◀</a></li>
+						<c:if test = "${map.startPage!=1}">
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${map.startPage-5}&kwd=${map.kwd}&value=${map.value}&arrow=arrow">◀</a></li>
 						</c:if>
-						<c:forEach  begin="${paging[0]}" end="${paging[2]}"  step="1" var="page">
+						<c:forEach  begin="${map.startPage}" end="${map.endPage}"  step="1" var="page">
 							<c:choose>
-								<c:when test="${page==paging[1]}">
+								<c:when test="${map.currentPage==page}">
 									<li class="selected">
-									<a href="${pageContext.servletContext.contextPath}/board?position=${paging[0]}&page=${page}&condition=${search[0]}&kwd=${search[1]}">${page}</a></li>
+									<a href="${pageContext.servletContext.contextPath}/board?page=${page}&kwd=${map.kwd}&value=${map.value}">${page}</a></li>
 								</c:when>
 								<c:otherwise>
 								<li>
-								<a href="${pageContext.servletContext.contextPath}/board?position=${paging[0]}&page=${page}&condition=${search[0]}&kwd=${search[1]}">${page}</a></li>
+								<a href="${pageContext.servletContext.contextPath}/board?&page=${page}&kwd=${map.kwd}&value=${map.value}">${page}</a></li>
 								</c:otherwise>	
 							</c:choose>		
 						</c:forEach>
-						<c:if test = "${paging[2]!=Math.ceil(list.size()/5)}">
-						<li><a href="${pageContext.servletContext.contextPath}/board?page=${paging[0]+5}&condition=${search[0]}&kwd=${search[1]}">▶</a></li>
+						<c:if test = "${map.endPage!=Math.ceil(map.totalList.size()/5)}">
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${map.startPage+5}&kwd=${map.kwd}&value=${map.value}&arrow=arrow">▶</a></li>
 						</c:if>
 					</ul>
 				</div>					
-				<!-- pager 추가 -->		
+				<!-- pager 추가 -->			
 				<div class="bottom">
 					<c:choose>
 						<c:when test="${empty authUser}">
 							<a href="${pageContext.servletContext.contextPath}/user/login">글쓰기</a>
 						</c:when>
 						<c:otherwise>
-							<a href="${pageContext.servletContext.contextPath}/board/write" id="new-book">글쓰기</a>
+							<a href="${pageContext.servletContext.contextPath}/board/write?page=${map.currentPage}&kwd=${map.kwd}&value=${map.value}" id="new-book">글쓰기</a>
 						</c:otherwise>		
 					</c:choose>
 				</div>				

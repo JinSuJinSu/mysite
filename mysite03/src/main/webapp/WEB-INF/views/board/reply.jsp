@@ -20,6 +20,10 @@
 					<input type = "hidden" name = "groupNo" value = "${replyvo.groupNo}">
 					<input type = "hidden" name = "orderNo" value = "${replyvo.orderNo}">
 					<input type = "hidden" name = "depth" value = "${replyvo.depth}">
+					<input type = "hidden" name= "page" value="${param.page}">
+					<input type = "hidden" name= "kwd" value="${param.kwd}">
+					<input type = "hidden" name= "value" value="${param.value}">
+		
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>
@@ -36,7 +40,7 @@
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="${pageContext.request.contextPath}/board?no=${replyvo.no}&back=back">취소</a>
+						<a href="${pageContext.request.contextPath}/board?page=${param.page}&kwd=${param.kwd}&value=${param.value}">취소</a>
 						<input type="submit" value="등록">
 					</div>
 				</form>				

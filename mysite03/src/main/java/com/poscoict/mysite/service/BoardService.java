@@ -1,10 +1,14 @@
 package com.poscoict.mysite.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.poscoict.mysite.repository.BoardRepository;
 import com.poscoict.mysite.vo.BoardVo;
 import com.poscoict.mysite.vo.UserVo;
@@ -62,7 +66,6 @@ public class BoardService {
 	// 글 수정
 	public boolean updateContents(BoardVo vo) {
 		boolean result=false;
-		System.out.println(vo);
 		if(vo.getTitle()!=null && !vo.getTitle().equals("") && vo.getContent()!=null && !vo.getContent().equals("")) {
 			result = boardRepository.modify(vo);	
 		}
@@ -70,8 +73,7 @@ public class BoardService {
 	}
 	
 	// 글 삭제
-	public long deleteContents(Long no) {
-		long boardNumber=no;
+	public boolean deleteContents(Long no) {
 		BoardVo vo = boardRepository.findOne(no);
 		int cnt = boardRepository.replyCheck(vo.getGroupNo());
 		boolean result=false;
@@ -81,55 +83,38 @@ public class BoardService {
 		}
 		else {
 			// 댓글이 달려 있지 않은 글일 경우
-			// 삭제같은 경우 게시글 번호로 되돌아가기가 불가능하다.
-			List<BoardVo> dataList = boardRepository.findAll("","title");
-			int startNum=0;
-			for(BoardVo value : dataList) {
-				if(value.getNo()==no) {
-					break;
-				}
-				else {
-					startNum+=1;
-				}
-			}
-			// 그래서 no를 바로 전위치로 가져다 주어야한다.
-			long number;
-			if(startNum==0) { // 맨앞에 있는 값을 삭제할 경우 -1로 인덱스 범위 오류가 난다.
-				number = dataList.get(1).getNo();
-			}
-			else {
-				 number = dataList.get(startNum-1).getNo();
-			}
-			result = boardRepository.delete(no);
-			boardNumber = number;
-			
+			result = boardRepository.delete(no);			
 		}
-		return boardNumber;
+		return result;
 	}
 	
-	// 전체글 가져오기
-	public List<BoardVo> allContents(String value, String condition){
-		List<BoardVo> list = boardRepository.findAll(value,condition);
-		return list;
-	}
-	
-	
-	// 글 리스트(찾기 결과)
-	public List<BoardVo> getContents(String value, String condition, int startPoint){
-//		Map<String, Object> map = new HashMap<>();
-//		int currentPage, String keyword(함수의 원래 인자(나중에 풀기))
 
-		List<BoardVo> list = boardRepository.limitFind(value,condition,startPoint);
-		return list;
-//		
-//		map.put("list", null);
-//		map.put("totalCount", 0);
-//		map.put("-", map);
-//		return map;
+	// 글 리스트(찾기 결과)
+	public Map<String, Object> getContentsList(String value, String kwd, int currentPage, String arrow){
+		List<Long> totalList = boardRepository.findAll(value,kwd); // 전체 개새글 가져오기
+		List<BoardVo> list = boardRepository.limitFind(value,kwd,currentPage); // 현제 패이지 개시글
+		
+		int startPage = 1 + 5*((currentPage-1)/5); // 시작페이지는 1, 6, 11 이런식으로 되고 페이징 시작점이 5개씩이다.
+		int endPage = startPage + 4; // 화살표 양옆으로 5개씩 페이지가 존재하므로 첫페이지가 1이면 마지막 페이지는 5가 된다.
+		if (endPage >= Math.ceil((double) totalList.size() / 5)) {
+			endPage = (int) Math.ceil((double) totalList.size() / 5); // 예들 들어 게시글의 개수가 36개일 때 최대 페이지 번호는 8이고 그보다 크면 범위를 벗어나므로 최대페이지 번호로 고정시킨다.
+		}
+		if(arrow.equals("arrow")) {
+			currentPage=startPage; // 화살표를 클릭했을 때 1,6,11로 시작하므로 현재 페이지를 시작 페이지와 같게 해준다.
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+	
+		map.put("list", list);
+		map.put("totalList", totalList);
+		map.put("startPage", startPage);
+		map.put("currentPage", currentPage);
+		map.put("endPage", endPage);
+		map.put("value", value);
+		map.put("kwd", kwd);
+		return map;
 			
 	}
-	
 
-	
 
 }

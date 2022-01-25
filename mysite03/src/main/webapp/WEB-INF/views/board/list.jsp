@@ -55,11 +55,11 @@
 							</c:otherwise>		
 						</c:choose>
 						</td>				
-						<td>${vo.userName}</td>
+						<td>${vo.name}</td>
 						<td>${vo.hit}</td>
 						<td>${vo.regDate}</td>
 						<td>
-						<c:if test = "${authUser.name == vo.userName && vo.title != '삭제된 글입니다.'}">
+						<c:if test = "${authUser.name == vo.name && vo.title != '삭제된 글입니다.'}">
 						<a href="${pageContext.servletContext.contextPath}/board/delete/${vo.no}?page=${map.currentPage}&kwd=${map.kwd}&value=${map.value}" class="del" 
 						style='background-image: url("${pageContext.servletContext.contextPath}/assets/images/recycle.png")'>삭제</a>
 						</c:if>

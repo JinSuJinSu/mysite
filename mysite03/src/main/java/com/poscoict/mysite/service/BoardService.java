@@ -25,7 +25,7 @@ public class BoardService {
 		if(vo.getTitle()!=null && !vo.getTitle().equals("") && vo.getContent()!=null && !vo.getContent().equals("")) {
 			UserVo authUser = (UserVo)session.getAttribute("authUser");
 			vo.setUserNo(authUser.getNo());
-			result=boardRepository.write(vo);
+			result=boardRepository.insert(vo);
 		}
 		return result;		
 	}
@@ -37,9 +37,8 @@ public class BoardService {
 			boolean updateResult=false;
 			boolean insertResult=false;
 			UserVo authUser = (UserVo)session.getAttribute("authUser");
-			vo.setUserNo(authUser.getNo());
 			updateResult = boardRepository.replyUpdate(vo.getOrderNo(), vo.getGroupNo());
-			insertResult = boardRepository.replyWrite(vo);	
+			insertResult = boardRepository.replyInsert(vo);	
 			result=true;
 		}
 		return result;
@@ -67,7 +66,7 @@ public class BoardService {
 	public boolean updateContents(BoardVo vo) {
 		boolean result=false;
 		if(vo.getTitle()!=null && !vo.getTitle().equals("") && vo.getContent()!=null && !vo.getContent().equals("")) {
-			result = boardRepository.modify(vo);	
+			result = boardRepository.update(vo);	
 		}
 		return result;
 	}
@@ -76,6 +75,7 @@ public class BoardService {
 	public boolean deleteContents(Long no) {
 		BoardVo vo = boardRepository.findOne(no);
 		int cnt = boardRepository.replyCheck(vo.getGroupNo());
+		System.out.println(cnt);
 		boolean result=false;
 		if(cnt>1) {
 			// 댓글이 달려 있는 글일 경우

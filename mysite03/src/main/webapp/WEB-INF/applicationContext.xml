@@ -10,8 +10,7 @@
         http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
-        
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">        
         
     <!-- Connection Pool DataSource-->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
@@ -21,6 +20,16 @@
 		<property name="password" value="webdb" />
 	</bean>
 	        
+    <!-- MyBatis SqlSessionFactoryBean --> 
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+		<property name="dataSource" ref="dataSource" /> 
+		<property name="configLocation" value="classpath:mybatis/configuration.xml" /> 
+	</bean>
+	
+	<!-- MyBatis SqlSessionTemplate --> 
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>        
         
 	<context:annotation-config />
 	<context:component-scan base-package="com.poscoict.mysite.service, com.poscoict.mysite.repository">

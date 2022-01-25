@@ -34,6 +34,7 @@ public class GuestbookController {
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public String add(GuestbookVo vo) {
 		// 입력이 제대로 되어있을 경우만 삽입이 가능하도록 해준다.
+		System.out.println("guestbook");
 		boolean result = guestbookService.addMessage(vo);
 		return "redirect:/guestbook";
 		
@@ -53,7 +54,5 @@ public class GuestbookController {
 		boolean result = guestbookService.deleteMessage(no,password);
 		return "redirect:/guestbook/list";
 	}
-	
-	
 
 }

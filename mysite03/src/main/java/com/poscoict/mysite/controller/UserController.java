@@ -73,11 +73,9 @@ public class UserController {
 		if(authUser == null) {
 			return "redirect:/";
 		}
-
 		Long userNo = authUser.getNo();
-		UserVo userVo = userService.getUser(userNo);
-		model.addAttribute("userVo", userVo);
-
+		UserVo userVo = userService.getUser(userNo);	
+		model.addAttribute("userVo", userVo);	
 		return "user/update";
 	}
 	
@@ -88,17 +86,17 @@ public class UserController {
 		if(authUser == null) {
 			return "redirect:/";
 		}
-
 		userVo.setNo(authUser.getNo());
 		userService.updateUser(userVo);
-
-		return "redirect:/user/update";
+		authUser = userService.getUser(userVo.getNo());
+		session.setAttribute("authUser",authUser);
+		return "redirect:/";
 	}
 	
-	@ExceptionHandler(Exception.class)
-	public String UserControllerExceptionHandler() {
-		return "error/exception";
-	}
+//	@ExceptionHandler(Exception.class)
+//	public String UserControllerExceptionHandler() {
+//		return "error/exception";
+//	}
 	
 
 }

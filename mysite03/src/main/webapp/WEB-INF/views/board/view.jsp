@@ -35,7 +35,7 @@
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath}/board?page=${param.page}&kwd=${param.kwd}&value=${param.value}">글목록</a>
 					
-					<c:if test = "${authUser.name == readvo.userName}">
+					<c:if test = "${authUser.name == readvo.name}">
 					<a href="${pageContext.request.contextPath}/board/modify/${readvo.no}?page=${param.page}&kwd=${param.kwd}&value=${param.value}">글수정</a>
 					</c:if>
 					<c:if test = "${not empty authUser}">

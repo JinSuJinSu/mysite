@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poscoict.mysite.service.BoardService;
 import com.poscoict.mysite.vo.BoardVo;
+import com.poscoict.web.util.WebUtil;
 
 @Controller
 @RequestMapping("/board")
@@ -26,18 +27,16 @@ public class BoardController {
 	@RequestMapping({"","/list"})
 	public String viewList(Model model, HttpSession session,
 			@RequestParam(value="page", required=true, defaultValue="1") int page,
-			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
+			@RequestParam(value="kwd", required=true, defaultValue="title") String kwd,
 			@RequestParam(value="value", required=true, defaultValue="") String value,
 			@RequestParam(value="arrow", required=true, defaultValue="") String arrow)
 	{
 		
 		if((long[])session.getAttribute("read")!=null) {
 			session.removeAttribute("read"); // 조회가 끝나면 해당 세션을 제거해준다.
-		}	
-		if(kwd==null || kwd.equals("")) {
-			kwd="title"; // kwd, 검색 값이 비어 있을 경우는 전체 조회가 된다.
 		}
-		Map<String, Object> map = boardService.getContentsList(value, kwd ,page, arrow);
+	
+		Map<String, Object> map = boardService.getContentsList(value, kwd ,page, arrow); // 검색 값이 비어 있을 경우는 전체 조회가 된다.
 		model.addAttribute("map", map);
 		return "board/list";
 		
@@ -84,7 +83,7 @@ public class BoardController {
 			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 			@RequestParam(value="value", required=true, defaultValue="") String value){
 		boolean result=boardService.updateContents(vo);
-		return "redirect:/board?page=" + page + "&kwd=" + kwd + "&value=" + value;
+		return "redirect:/board?page=" + page + "&kwd=" + kwd + "&value=" + WebUtil.encodeURL(value, "UTF-8");
 	}
 	
 	//게시판 글 삭제
@@ -94,7 +93,7 @@ public class BoardController {
 			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 			@RequestParam(value="value", required=true, defaultValue="") String value){
 		boolean result=boardService.deleteContents(no);
-		return "redirect:/board?page=" + page + "&kwd=" + kwd + "&value=" + value;
+		return "redirect:/board?page=" + page + "&kwd=" + kwd + "&value=" + WebUtil.encodeURL(value, "UTF-8");
 	}
 	
 	
@@ -117,7 +116,7 @@ public class BoardController {
 			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 			@RequestParam(value="value", required=true, defaultValue="") String value){
 		boolean result=boardService.replyContents(vo, session);
-		return "redirect:/board?page=" + page + "&kwd=" + kwd + "&value=" + value;
+		return "redirect:/board?page=" + page + "&kwd=" + kwd + "&value=" + WebUtil.encodeURL(value, "UTF-8");
 	}
 	
 		

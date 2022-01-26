@@ -69,8 +69,6 @@
 				</table>
 									<!-- pager 추가 -->
 				<div class="pager">
-<!-- 					paging[0]= startpage, paging[1]= endpage
-					search[0]= search_condition(title,content), search[1]=search_keyword -->
 					<ul>
 						<c:if test = "${map.startPage!=1}">
 						<li><a href="${pageContext.servletContext.contextPath}/board?page=${map.startPage-5}&kwd=${map.kwd}&value=${map.value}&arrow=arrow">◀</a></li>

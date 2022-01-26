@@ -76,7 +76,6 @@ public class BoardService {
 	public boolean deleteContents(Long no) {
 		BoardVo vo = boardRepository.findOne(no);
 		int cnt = boardRepository.replyCheck(vo.getGroupNo());
-		System.out.println(cnt);
 		boolean result=false;
 		if(cnt>1) {
 			// 댓글이 달려 있는 글일 경우

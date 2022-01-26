@@ -25,8 +25,6 @@ public class BoardRepository {
 	// 모든 글의 게시판 번호를 조회한다.(검색 포함)
 		public List<Long> findAll(String value, String kwd){
 			Map<String, Object> map = new HashMap<>();
-			System.out.println("value : " +value);
-			System.out.println("kwd : " +kwd);
 			map.put("kwd", kwd);
 			map.put("value", value);
 			List<Long> list=sqlSession.selectList("board.findAll", map);
@@ -50,7 +48,6 @@ public class BoardRepository {
 	// 특정 번호를 가지고 있는 글을 찾기
 	public BoardVo findOne(long no) {
 		BoardVo vo=sqlSession.selectOne("board.findOne", no);
-		System.out.println(vo);
 		return vo;
 	}
 	

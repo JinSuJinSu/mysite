@@ -14,7 +14,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/modify">
+				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/update">
 					<input type="hidden" name="no" value = "${updatevo.no}">
 					<input type = "hidden" name= "page" value="${param.page}">
 					<input type = "hidden" name= "kwd" value="${param.kwd}">

@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.poscoict.mysite.security.Auth;
+import com.poscoict.mysite.security.AuthUser;
 import com.poscoict.mysite.service.BoardService;
 import com.poscoict.mysite.vo.BoardVo;
+import com.poscoict.mysite.vo.UserVo;
 import com.poscoict.web.util.WebUtil;
 
 @Controller
@@ -52,33 +55,38 @@ public class BoardController {
 	}
 	
 	// 게시판 글쓰기 화면 이동
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String write(){
 		return "board/write";
 	}
 	
 	// 게시판 글쓰기
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(BoardVo vo, HttpSession session) {
-		boolean result=boardService.addContents(vo, session);
+	public String write(@AuthUser UserVo authUser, BoardVo vo) {
+		vo.setUserNo(authUser.getNo());
+		boolean result=boardService.addContents(vo);
 		return "redirect:/board";
 	}
 	
 	// 게시판 글수정 화면 이동
-	@RequestMapping(value = "/modify/{no}", method = RequestMethod.GET)
-	public String modify(@PathVariable("no") Long no, Model model, HttpSession session,
+	@Auth
+	@RequestMapping(value = "/update/{no}", method = RequestMethod.GET)
+	public String modify(@AuthUser UserVo authUser, @PathVariable("no") Long no, Model model,
 			@RequestParam(value="page", required=true, defaultValue="1") int page,
 			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 			@RequestParam(value="value", required=true, defaultValue="") String value){
 		boolean result=false;
-		BoardVo vo = boardService.getContents(no, session);
+		BoardVo vo = boardService.getContents(no);
 		model.addAttribute("updatevo", vo);
 		return "board/modify";
 	}
 	
 	// 게시판 글 수정
-	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String write(BoardVo vo, 
+	@Auth
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String write(@AuthUser UserVo authUser, BoardVo vo, 
 			@RequestParam(value="page", required=true, defaultValue="1") int page,
 			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 			@RequestParam(value="value", required=true, defaultValue="") String value){
@@ -87,8 +95,9 @@ public class BoardController {
 	}
 	
 	//게시판 글 삭제
+	@Auth
 	@RequestMapping(value = "/delete/{no}", method = RequestMethod.GET)
-	public String delete(@PathVariable("no") Long no,
+	public String delete(@AuthUser UserVo authUser, @PathVariable("no") Long no,
 			@RequestParam(value="page", required=true, defaultValue="1") int page,
 			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 			@RequestParam(value="value", required=true, defaultValue="") String value){
@@ -99,23 +108,24 @@ public class BoardController {
 	
 	// 게시판 답변 화면 이동
 	@RequestMapping(value = "/reply/{no}", method = RequestMethod.GET)
-	public String reply(@PathVariable("no") Long no, Model model, HttpSession session,
+	public String reply(@AuthUser UserVo authUser, @PathVariable("no") Long no, Model model,
 		@RequestParam(value="page", required=true, defaultValue="1") int page,
 		@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 		@RequestParam(value="value", required=true, defaultValue="") String value){
 		boolean result=false;
-		BoardVo vo = boardService.getContents(no, session);
+		BoardVo vo = boardService.getContents(no);
 		model.addAttribute("replyvo", vo);
 		return "board/reply";
 	}
 	
 	// 게시판 답글 달기
 	@RequestMapping(value = "/reply", method = RequestMethod.POST)
-	public String reply(BoardVo vo, HttpSession session,
+	public String reply(@AuthUser UserVo authUser, BoardVo vo,
 			@RequestParam(value="page", required=true, defaultValue="1") int page,
 			@RequestParam(value="kwd", required=true, defaultValue="") String kwd,
 			@RequestParam(value="value", required=true, defaultValue="") String value){
-		boolean result=boardService.replyContents(vo, session);
+		vo.setUserNo(authUser.getNo());
+		boolean result=boardService.replyContents(vo);
 		return "redirect:/board?page=" + page + "&kwd=" + kwd + "&value=" + WebUtil.encodeURL(value, "UTF-8");
 	}
 	

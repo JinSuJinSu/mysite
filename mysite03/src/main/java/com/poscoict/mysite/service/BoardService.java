@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.poscoict.mysite.repository.BoardRepository;
 import com.poscoict.mysite.vo.BoardVo;
 import com.poscoict.mysite.vo.UserVo;
@@ -20,24 +18,20 @@ public class BoardService {
 	private BoardRepository boardRepository;
 	
 	// 글쓰기
-	public boolean addContents(BoardVo vo, HttpSession session) {
+	public boolean addContents(BoardVo vo) {
 		boolean result=false;
 		if(vo.getTitle()!=null && !vo.getTitle().equals("") && vo.getContent()!=null && !vo.getContent().equals("")) {
-			UserVo authUser = (UserVo)session.getAttribute("authUser");
-			vo.setUserNo(authUser.getNo());
 			result=boardRepository.insert(vo);
 		}
 		return result;		
 	}
 	
 	// 답글 달기
-	public boolean replyContents(BoardVo vo, HttpSession session) {
+	public boolean replyContents(BoardVo vo) {
 		boolean result=false;
 		if(vo.getTitle()!=null && !vo.getTitle().equals("") && vo.getContent()!=null && !vo.getContent().equals("")) {
 			boolean updateResult=false;
 			boolean insertResult=false;
-			UserVo authUser = (UserVo)session.getAttribute("authUser");
-			vo.setUserNo(authUser.getNo());
 			updateResult = boardRepository.replyUpdate(vo.getOrderNo(), vo.getGroupNo());
 			insertResult = boardRepository.replyInsert(vo);	
 			result=true;
@@ -45,7 +39,7 @@ public class BoardService {
 		return result;
 	}
 	
-	// 글보기
+	// 글보기(조회수 기능 포함)
 	public BoardVo getContents(Long no, HttpSession session){
 		BoardVo vo = boardRepository.findOne(no);
 		boolean result=false;
@@ -62,6 +56,12 @@ public class BoardService {
 			}
 		return vo;
 	}
+	
+	// 글보기(조회수 기능 없음)
+	public BoardVo getContents(Long no){
+		BoardVo vo = boardRepository.findOne(no);
+		return vo;
+	}	
 	
 	// 글 수정
 	public boolean updateContents(BoardVo vo) {

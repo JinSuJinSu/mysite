@@ -92,14 +92,7 @@
 				</div>					
 				<!-- pager 추가 -->			
 				<div class="bottom">
-					<c:choose>
-						<c:when test="${empty authUser}">
-							<a href="${pageContext.servletContext.contextPath}/user/login">글쓰기</a>
-						</c:when>
-						<c:otherwise>
-							<a href="${pageContext.servletContext.contextPath}/board/write?page=${map.currentPage}&kwd=${map.kwd}&value=${map.value}" id="new-book">글쓰기</a>
-						</c:otherwise>		
-					</c:choose>
+					<a href="${pageContext.servletContext.contextPath}/board/write?page=${map.currentPage}&kwd=${map.kwd}&value=${map.value}" id="new-book">글쓰기</a>
 				</div>				
 			</div>
 		</div>

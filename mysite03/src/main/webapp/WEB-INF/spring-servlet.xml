@@ -47,6 +47,10 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
+	
+	<!-- mvc url-resource mapping -->
+	<mvc:resources mapping="/images/**" location="file:/upload-images/" />
+	
 	 <!-- MessageSource -->
 		<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		   <property name="basenames">
@@ -55,6 +59,9 @@
 		      </list>
 		   </property>
 		</bean>
+		
+		
+
 			
 
 	<context:annotation-config />

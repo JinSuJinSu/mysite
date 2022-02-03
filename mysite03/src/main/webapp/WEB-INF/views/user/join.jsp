@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,38 +16,39 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="user">
-				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath}/user/join">
+				<form:form
+					modelAttribute="userVo" 
+					id="join-form" 
+					name="joinForm" 
+					method="post" 
+					action="${pageContext.request.contextPath }/user/join">
+					
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="${userVo.name}">
-					<p style="text-align:left; padding-left:0; color:red">
+					<form:input path="name" />
+					<p style="text-align:left; padding-left:0; color:#f00">
 						<spring:hasBindErrors name="userVo">
-							<c:if test="${errors.hasFieldErrors('name')}">
-								<spring:message code="${errors.getFieldError('name').codes[0]}"/>
+							<c:if test="${errors.hasFieldErrors('name') }">
+								<spring:message code="${errors.getFieldError('name').codes[0] }" />
 							</c:if>
 						</spring:hasBindErrors>
 					</p>
-
-					
-					<label class="block-label" for="email">이메일</label>
-					<input id="email" name="email" type="text" value="">
+					<label class="block-label" for="email"><spring:message code="user.join.label.password" /></label>
+					<form:input path="email" />
 					<input type="button" value="id 중복체크">
+					<p style="text-align:left; padding-left:0; color:#f00">
+						<form:errors path="email" />
+					</p>	
 					
 					<label class="block-label">패스워드</label>
-					<input name="password" type="password" value="">
+					<form:password path="password" />
+					<p style="text-align:left; padding-left:0; color:#f00">
+						<form:errors path="password" />
+					</p>	
 					
 					<fieldset>
 						<legend>성별</legend>
-						<c:choose>
-						<c:when test = "${userVo.gender == 'female'}">
-						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
-						<label>남</label> <input type="radio" name="gender" value="male">
-						</c:when>
-						<c:otherwise>
-						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
-						<label>남</label> <input type="radio" name="gender" value="male">
-						</c:otherwise>
-						
-						</c:choose>
+						<form:radiobutton path="gender" value="female" label="여"/>
+						<form:radiobutton path="gender" value="male" label="남"/>
 					</fieldset>
 					
 					<fieldset>
@@ -57,7 +59,7 @@
 					
 					<input type="submit" value="가입하기">
 					
-				</form>
+				</form:form>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>

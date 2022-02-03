@@ -24,6 +24,11 @@ public class AuthIntercepter extends HandlerInterceptorAdapter{
 
 		//3. Handler Method의 @Auth 받아오기
 		Auth auth = handlerMethod.getMethodAnnotation(Auth.class);
+		
+		if(auth==null) {
+			auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
+			
+		}
 
 		//4. Handler Method의 @Auth가 적용이 안되어 있는 경우
 		if(auth == null) {
@@ -41,8 +46,19 @@ public class AuthIntercepter extends HandlerInterceptorAdapter{
 			response.sendRedirect(request.getContextPath() + "/user/login");
 			return false;
 		}
+		
 
-		//6. 인증 확인!!! -> controller의 hanlder(method) 실행
+		// 6. admin일 경우
+		if("ADMIN".equals(authUser.getRole()) ) { // admin임을 알 수 있는 조건을 작성한다.
+				return true;
+		}
+		if(!auth.role().equals(authUser.getRole())) {
+			response.sendRedirect(request.getContextPath());
+			return false;
+		}
+		
+
+		//7. 인증 확인!!! -> controller의 hanlder(method) 실행
 		return true;
 	}
 

@@ -38,6 +38,7 @@ public class BoardController {
 		if((long[])session.getAttribute("read")!=null) {
 			session.removeAttribute("read"); // 조회가 끝나면 해당 세션을 제거해준다.
 		}
+		
 	
 		Map<String, Object> map = boardService.getContentsList(value, kwd ,page, arrow); // 검색 값이 비어 있을 경우는 전체 조회가 된다.
 		model.addAttribute("map", map);

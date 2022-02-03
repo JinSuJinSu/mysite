@@ -16,6 +16,7 @@ public class JDBC {
 			
 			// 2. 연결하기
 			String url = "jdbc:mysql://192.168.0.66:3307/webdb?characterEncoding=UTF-8&serverTimezone=UTC";
+			
 			String user = "webdb";
 			String passwd = "webdb";
 			conn = DriverManager.getConnection(url, user, passwd);						

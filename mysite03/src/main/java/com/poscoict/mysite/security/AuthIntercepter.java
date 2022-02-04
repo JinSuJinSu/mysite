@@ -25,17 +25,18 @@ public class AuthIntercepter extends HandlerInterceptorAdapter{
 		//3. Handler Method의 @Auth 받아오기
 		Auth auth = handlerMethod.getMethodAnnotation(Auth.class);
 		
+		//4. Handler Method에 @Auth가 없으면 Type에 있는지 확인
 		if(auth==null) {
 			auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
-			
+//			auth = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Auth.class);
 		}
 
-		//4. Handler Method의 @Auth가 적용이 안되어 있는 경우
+		//5. type(4)과 method(3)에 @Auth가 적용이 안되어 있는 경우
 		if(auth == null) {
 			return true;
 		}
 
-		//5. @Auth가 적용이 되어 있기 때문에 인증(Authentication) 여부 확인
+		//6. @Auth가 적용이 되어 있기 때문에 인증(Authentication) 여부 확인
 		HttpSession session = request.getSession();
 		if(session == null) {
 			response.sendRedirect(request.getContextPath() + "/user/login");
@@ -47,18 +48,26 @@ public class AuthIntercepter extends HandlerInterceptorAdapter{
 			return false;
 		}
 		
-
-		// 6. admin일 경우
-		if("ADMIN".equals(authUser.getRole()) ) { // admin임을 알 수 있는 조건을 작성한다.
-				return true;
+		// 7. admin일 경우(권한 체크를 위해서 @Auth의 role 가져오기("USER","ADMIN")
+//		String role = auth.role();
+		
+		// 8. @Auth의 role이 "USER"인 경우 authUser의 role은 상관이 없다.
+//		if("USER".equals(role)) {
+//			return true;
+//		}
+		
+		// 9. @Auth의 role이 "ADMIN"인 경우 authUser는 "ADMIN"이어야 한다.
+		if("ADMIN".equals(authUser.getRole()) ) { 
+			return true;
 		}
+		
+		// admin이 아닌 user일 때
 		if(!auth.role().equals(authUser.getRole())) {
 			response.sendRedirect(request.getContextPath());
 			return false;
 		}
 		
-
-		//7. 인증 확인!!! -> controller의 hanlder(method) 실행
+		//10. 인증 확인!!! -> controller의 hanlder(method) 실행
 		return true;
 	}
 

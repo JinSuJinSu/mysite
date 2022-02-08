@@ -41,5 +41,6 @@ public class UserRepository {
 		UserVo result = sqlSession.selectOne("user.findByNo", userNo);
 		return result;
 	}
+	
 
 }

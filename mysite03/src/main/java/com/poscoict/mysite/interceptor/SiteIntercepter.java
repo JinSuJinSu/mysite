@@ -1,8 +1,7 @@
-package com.poscoict.mysite.security;
+package com.poscoict.mysite.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -23,10 +22,6 @@ public class SiteIntercepter extends HandlerInterceptorAdapter{
 			siteVo = siteService.getAdmin();
 			request.getServletContext().setAttribute("site",siteVo);
 		}
-		request.getRequestDispatcher("/WEB-INF/views/main/index.jsp").forward(request, response);
-		return false;
+		return true;
 	}
-	
-	
-
 }

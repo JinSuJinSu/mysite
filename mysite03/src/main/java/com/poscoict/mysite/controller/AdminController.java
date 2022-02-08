@@ -1,5 +1,6 @@
 package com.poscoict.mysite.controller;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class AdminController {
 	@Autowired
 	private FileUploadService fileUploadService;
 	
+	@Autowired
+	private ServletContext servletContext;
+	
 	
 	@RequestMapping({"","/main"})
 	public String main(Model model) {
@@ -36,7 +40,7 @@ public class AdminController {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(SiteVo vo,
-			@RequestParam(value="file1") MultipartFile multipartFile, HttpServletRequest request) {
+			@RequestParam(value="file1") MultipartFile multipartFile) {
 		String url = fileUploadService.restore(multipartFile);
 		if(url==null) {
 			SiteVo originVo = siteService.getAdmin();
@@ -44,7 +48,7 @@ public class AdminController {
 		}
 		vo.setProfile(url);	
 		boolean result = siteService.updateAdmin(vo);
-		request.getServletContext().setAttribute("site",vo);
+		servletContext.setAttribute("site",vo);
 		
 		return "redirect:/admin";
 	}

@@ -23,6 +23,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private HttpSession session;
+	
 	@RequestMapping(value="/join", method=RequestMethod.GET)
 	public String join(@ModelAttribute UserVo userVo) {
 		return "user/join";
@@ -64,12 +67,12 @@ public class UserController {
 	
 	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String update(@AuthUser UserVo authUser, UserVo userVo, HttpSession session) {
-		/* access controller */
-		userVo.setNo(authUser.getNo());
-		userService.updateUser(userVo);
-		authUser = userService.getUser(userVo.getNo());
-		session.setAttribute("authUser",authUser);
+	public String update(@AuthUser UserVo authUser, UserVo userVo) {
+		UserVo vo = userService.getUser(authUser.getNo());
+		userVo.setRole(vo.getRole());
+		userVo.setNo(vo.getNo());
+		userService.updateUser(userVo);	
+		session.setAttribute("authUser", userVo);
 		return "redirect:/";
 	}
 	

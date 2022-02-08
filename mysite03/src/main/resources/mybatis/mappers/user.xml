@@ -3,7 +3,7 @@
 <mapper namespace="user">
 	<select id="findByNo" parameterType="long" resultType="uservo">
 		<![CDATA[
-		select no, name, email, gender from user where no=#{no}
+		select no, name, email, gender, role from user where no=#{no}
 		]]>
 	</select>
 	
@@ -12,6 +12,7 @@
 		select no, name, role from user where email=#{email} and password=#{password}
 		]]>
 	</select>
+	
 
 	<insert id="insert" parameterType="uservo">
 		<![CDATA[

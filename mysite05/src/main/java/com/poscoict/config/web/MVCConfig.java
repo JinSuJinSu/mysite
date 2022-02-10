@@ -1,17 +1,25 @@
 package com.poscoict.config.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
+@PropertySource("classpath:com/poscoict/mysite/config/web/css.properties")
 @EnableWebMvc
 public class MVCConfig extends WebMvcConfigurerAdapter {
+	
+	@Autowired
+	private Environment env;
 	
 	// View Resolver
 	@Bean
@@ -24,12 +32,17 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 	}
 	
 	
-	// Message Converter
+	//resourcers
+	@Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(env.getProperty("css.resourceHandler"))
+                .addResourceLocations(env.getProperty("css.resourceLocations"));
+    }
 	
 	// Default Servlet Handler(web.xml 없애기 위해 필요한것 -> css asset 파일을 resource로 옮겨주는것이 힌트)
-	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
-	}
+//	@Override
+//	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+//		configurer.enable();
+//	}
 
 }

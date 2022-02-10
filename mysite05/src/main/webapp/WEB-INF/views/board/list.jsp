@@ -12,7 +12,7 @@
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="${pageContext.servletContext.contextPath }/assets/css/board.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.servletContext.contextPath }/resources/css/board.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <h1 id="size" style="display:none">${list.size()}</h1>
@@ -44,7 +44,7 @@
 						<!-- limit로 5개씩 정렬된 게시글을 나타낼 때 list 사이즈에서 데이터 테이블 no 컬럼의 값의 위치를 구해 빼면 순서대로 글 번호를 출력할 수 있다.-->
 						<td>${map.totalList.size()-map.totalList.indexOf(vo.no)}</td>
 						<td style="text-align:left; padding-left:${(vo.depth-1)*20}px;">
-						<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/assets/images/reply.png">
+						<c:if test = "${vo.depth>1}"><img src="${pageContext.servletContext.contextPath}/resources/images/reply.png">
 						</c:if>
 						<c:choose>
 							<c:when test="${vo.title!='삭제된 글입니다.'}">
@@ -61,7 +61,7 @@
 						<td>
 						<c:if test = "${authUser.name == vo.name && vo.title != '삭제된 글입니다.'}">
 						<a href="${pageContext.servletContext.contextPath}/board/delete/${vo.no}?page=${map.currentPage}&kwd=${map.kwd}&value=${map.value}" class="del" 
-						style='background-image: url("${pageContext.servletContext.contextPath}/assets/images/recycle.png")'>삭제</a>
+						style='background-image: url("${pageContext.servletContext.contextPath}/resources/images/recycle.png")'>삭제</a>
 						</c:if>
 						</td>
 					</tr>

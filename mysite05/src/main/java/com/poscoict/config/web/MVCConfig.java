@@ -26,7 +26,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 	
 	// Message Converter
 	
-	// Default Servlet Handler
+	// Default Servlet Handler(web.xml 없애기 위해 필요한것 -> css asset 파일을 resource로 옮겨주는것이 힌트)
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();

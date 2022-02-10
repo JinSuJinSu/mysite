@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<select id="getTotalCount" parameterType="string" resultType="Integer">
+		<choose>
+			<when test="_parameter == null or '' == __parameter">
+				<![CDATA[
+				select count(*) from board
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				select count(*) from board where title like '%${_parameter}%' or contents like '%${_parameter}%'
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 게시판 전체 조회(검색 포함) -->
+	<select id="findAll" parameterType="map" resultType="long">
+	<![CDATA[
+			select no from board where ${kwd} like '%${value}%' order by groupNo desc, orderNo asc
+	]]>
+	</select>
+	
+	<!-- 특정 페이지 게시판 조회(검색 포함) -->
+	<select id="limitFind" parameterType="map" resultType="boardvo">
+	<![CDATA[
+			select b.no, title, name, hit, depth, date_format(reg_date, '%Y-%m-%d %H:%i:%s') regDate from board b 
+			join user u on b.userNo=u.no 
+			where ${kwd} like '%${value}%' order by b.groupNo desc, b.orderNo asc limit #{page},5
+	]]>
+	</select>
+	
+	<!-- 글 쓰기 -->
+	<insert id="insert" parameterType="boardvo">
+	<![CDATA[
+			insert into board values(null, #{title}, #{content}, 0,  
+			(select * from(select max(ifnull(groupNo,0))+1 from board) as temp), 1, 1, now(), #{userNo})
+	]]>
+	</insert>
+	
+	<!-- 답글 추가하기 -->
+	<insert id="replyInsert" parameterType="boardvo">
+	<![CDATA[
+			insert into board values(null, #{title}, #{content}, 0, #{groupNo}, #{orderNo}+1, #{depth}+1, now(), #{userNo})
+	]]>
+	</insert>
+	
+	<!-- 답글 추가 전에 orderNo, groupNo 업데이트 하기  -->
+	<update id="replyUpdate" parameterType="map">
+	<![CDATA[
+			update board set orderNo=orderNo+1 where orderNo> #{orderNo} and groupNo=#{groupNo}
+	]]>
+	</update>
+	
+	
+	<!-- 글 조회수 증가시키기 -->
+	<update id="readUpdate" parameterType="boardvo">
+	<![CDATA[
+			update board set hit = ${hit} where no=${no}
+	]]>
+	</update>
+	
+	<!-- 특정 번호의 게시판 글 선택 -->
+	<select id="findOne" parameterType="long" resultType="boardvo">
+	<![CDATA[
+			select title, content, hit, b.no, name, groupNo, orderNo, depth from board b 
+			join user u on b.userNo=u.no where b.no=#{no}
+	]]>
+	</select>
+	
+	<!-- 글 삭제전 댓글 체크) -->
+	<select id="replyCheck" parameterType="Integer" resultType="Integer">
+	<![CDATA[
+		select count(*) from board where groupNo = #{groupNo}
+	]]>
+	</select>
+	
+	<!-- 글 삭제하기(댓글 없을 때) -->
+	<delete id="delete" parameterType="long">
+	<![CDATA[
+		delete from board where no = #{no}
+	]]>
+	</delete>
+	
+	<!-- 글 삭제하기(댓글 있을 때) 글 자체는 삭제하지 않고 삭제 되었다는 표시만 해준다.-->
+	<update id="deleteUpdate" parameterType="long">
+	<![CDATA[
+		update board set title='삭제된 글입니다.', content='' where no = #{no}
+	]]>
+	</update>
+
+	<!-- 글 수정하기 -->
+	<update id="update" parameterType="boardvo">
+	<![CDATA[
+		update board set title = #{title}, content = #{content} where no = #{no}
+	]]>
+	</update>
+</mapper>
+

@@ -41,6 +41,11 @@ public class UserRepository {
 		UserVo result = sqlSession.selectOne("user.findByNo", userNo);
 		return result;
 	}
+
+	public UserVo findByEmail(String email) {
+		UserVo result = sqlSession.selectOne("user.findByEmail", email);
+		return result;
+	}
 	
 
 }

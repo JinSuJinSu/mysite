@@ -38,11 +38,13 @@ public class UserController {
 //			for(ObjectError error : list) {
 //				System.out.println(error);
 //			}
-//			model.addAttribute("userVo",userVo);
+			
+			// model.addAttribute("userVo",  vo);
 			model.addAllAttributes(result.getModel());
 			return "user/join";
 		}
-		userService.join(userVo);
+		
+		// userService.join(vo);
 		return "redirect:/user/joinsuccess";
 	}
 	

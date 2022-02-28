@@ -49,7 +49,7 @@ $(function(){
 		
 		// 유효성 OK
 		console.log("OK!!");
-		// $("#join-form")[0].submit();
+		$("#join-form")[0].submit();
 	})
 	
 	

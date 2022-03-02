@@ -31,8 +31,8 @@ let messageBox = function(title, message, callback){
 let render = function(vo) {
 	let html = 
 			"<li data-no='" + vo.no + "'>" +
-			"<strong style='font-size:1.8em'>" + vo.name + "</strong>" +
-			"<p style='font-size:1.5em'>" + vo.message + "</p>" +
+			"<strong>" + vo.name + "</strong>" +
+			"<p>" + vo.message + "</p>" +
 			"<strong></strong>" +
 			"<a href='' data-no='" + vo.no + "'>삭제</a>" + 
 			"</li>";
@@ -128,6 +128,27 @@ $(function(){
 			fetch();
 		}
 	});
+
+	// div내에서 스크롤을 사용하는 코드
+/* 	let totalHeight=0;
+	$("#list-guestbook").scroll(function(event){
+		let nowHeight=$("#list-guestbook").scrollTop()
+		console.log($("#list-guestbook").scrollTop())
+	
+	//30px 남아있을때 추가 
+	if(totalHeight==0){
+		if(nowHeight > totalHeight + 25 ){
+			fetch();
+			totalHeight=nowHeight;
+		}
+	}
+	else{
+		if(nowHeight > totalHeight + 270 ){
+			fetch();
+			totalHeight=nowHeight;
+		}
+	}
+});  */
 
 	// 방명록 추가 버튼
 	$("#add-form").submit(function(event) {

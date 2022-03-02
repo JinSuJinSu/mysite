@@ -30,6 +30,11 @@ public class GuestbookController {
 		return "guestbook/list";
 	}
 	
+	@RequestMapping({"/spa"})
+	public String spa() {
+		return "guestbook/index-spa";
+	}
+	
 	// 방명록에 사람 추가하기
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public String add(GuestbookVo vo) {

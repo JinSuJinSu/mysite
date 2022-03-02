@@ -9,9 +9,9 @@
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="${pageContext.request.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/user.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script>
 let messageBox = function(title, message, callback){
@@ -135,7 +135,7 @@ $(function(){
 					<label class="block-label" for="email"><spring:message code="user.join.label.email" /></label>
 					<form:input path="email" />
 					<input type="button" id="btn-checkemail" value="중복체크">
-					<img id="img-checkemail" src="${pageContext.request.contextPath }/assets/images/check.png" width="16px" style="display:none">
+					<img id="img-checkemail" src="${pageContext.request.contextPath }/resources/images/check.png" width="16px" style="display:none">
 					<p style="text-align:left; padding-left:0; color:#f00">
 						<form:errors path="email" />
 					</p>	

@@ -10,6 +10,7 @@
 						<li><a href="${pageContext.request.contextPath}/guestbook">방명록</a></li>
 						<li><a href="${pageContext.request.contextPath}/board">게시판</a></li>
 						<li class="selected"><a href="${pageContext.request.contextPath}/gallery">갤러리</a></li>
+						<li><a href="${pageContext.request.contextPath}/ajaxgallery">방명록(Ajax)</a></li>
 					</c:when>
 					<c:otherwise>
 						<li><a href="${pageContext.request.contextPath}">하진수</a></li>

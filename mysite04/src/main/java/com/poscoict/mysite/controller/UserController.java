@@ -38,10 +38,12 @@ public class UserController {
 //			for(ObjectError error : list) {
 //				System.out.println(error);
 //			}
-//			model.addAttribute("userVo",userVo);
+			
+			// model.addAttribute("userVo",  userVo);
 			model.addAllAttributes(result.getModel());
 			return "user/join";
 		}
+		
 		userService.join(userVo);
 		return "redirect:/user/joinsuccess";
 	}
@@ -74,14 +76,6 @@ public class UserController {
 		userService.updateUser(userVo);	
 		session.setAttribute("authUser", userVo);
 		return "redirect:/";
-	}
-	
-	@RequestMapping(value="/auth", method=RequestMethod.POST)
-	public void auth() {
-	}
-	
-	@RequestMapping(value="/logout", method=RequestMethod.GET)
-	public void logout() {
 	}
 	
 //	@ExceptionHandler(Exception.class)

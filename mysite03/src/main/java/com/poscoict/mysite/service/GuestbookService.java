@@ -14,11 +14,16 @@ public class GuestbookService {
 	@Autowired
 	private GuestbookRepository guestbookRepository;
 
+	// 방문객 전체 조회
 	public List<GuestbookVo> getMessageList() {
 		return guestbookRepository.findAll();
 	}
-
 	
+	// 방문객 일부 조회
+	public List<GuestbookVo> getLimitMessage(long startNo) {
+		List<GuestbookVo> list = guestbookRepository.findLimit(startNo);
+		return list;
+	}
 	
 	// 방문객 삭제하기
 	public boolean deleteMessage(Long no, String password) {

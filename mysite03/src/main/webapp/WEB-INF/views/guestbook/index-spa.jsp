@@ -31,8 +31,8 @@ let messageBox = function(title, message, callback){
 let render = function(vo) {
 	let html = 
 			"<li data-no='" + vo.no + "'>" +
-			"<strong>" + vo.name + "</strong>" +
-			"<p>" + vo.message + "</p>" +
+			"<strong style='font-size:1.8em'>" + vo.name + "</strong>" +
+			"<p style='font-size:1.5em'>" + vo.message + "</p>" +
 			"<strong></strong>" +
 			"<a href='' data-no='" + vo.no + "'>삭제</a>" + 
 			"</li>";
@@ -40,9 +40,12 @@ let render = function(vo) {
 	 return html;		
 }
 
+let startNo=-1
+
 let fetch = function(){
+	
 	$.ajax({
-		url: '${pageContext.request.contextPath }/api/guestbook/list',
+		url: '${pageContext.request.contextPath }/api/guestbook/list?startNo=' + startNo,
 		type: 'get',
 		dataType: 'json',
 		success: function(response) {
@@ -51,13 +54,16 @@ let fetch = function(){
 				console.error(response.message);
 				return;
 			}
-			response.data.forEach(element=>$("#list-guestbook").append(render(element)));
+			response.data.forEach(element=>{
+				startNo=element.no;
+				$("#list-guestbook").append(render(element));
+			});
 		}
 	});
 }
 
 $(function(){
-	
+		
 	// 삭제다이얼로그 객체 만들기
 	let dialogDelete = $("#dialog-delete-form").dialog({
 		autoOpen: false,
@@ -113,6 +119,16 @@ $(function(){
 	// 최초리스트 가져오기
 	fetch();
 	
+	$(window).scroll(function(event){
+		let scrollHeight = $(window).scrollTop()+$(window).height(); //	올라간 높이+현재 보이는 높이
+		let documentHeight = $(document).height(); //전체높이
+		
+		//30px 남아있을때 추가 
+		if(scrollHeight +30> documentHeight){
+			fetch();
+		}
+	});
+
 	// 방명록 추가 버튼
 	$("#add-form").submit(function(event) {
 		event.preventDefault();
@@ -153,7 +169,6 @@ $(function(){
 			contentType: 'application/json',
 			data: JSON.stringify(vo),
 			success: function(response) {
-				console.log(response)
 				if(response.result !== 'success') {
 					console.error(response.message);
 					return;

@@ -31,6 +31,12 @@ public class GuestbookRepository {
 		List<GuestbookVo> list = sqlSession.selectList("guestbook.findAll");
 		return list;
 	}
+	
+	// 방문객 일부 조회
+	public List<GuestbookVo> findLimit(long startNo){
+		List<GuestbookVo> list = sqlSession.selectList("guestbook.findLimit",startNo);
+		return list;
+	}
 		
 	// 특정 번호를 가지고 방문객 찾기
 	public GuestbookVo selectOne(long no) {

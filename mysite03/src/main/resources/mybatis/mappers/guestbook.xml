@@ -16,8 +16,25 @@
 	<select id="findAll" resultType="guestbookvo">
 	<![CDATA[
 		select no, name, date_format(reg_date, "%Y/%m/%d %H:%i:%s") as reg_date, message 
-		from guestbook order by reg_date desc
+		from guestbook order by no desc
 	]]>
+	</select>
+	
+	<select id="findLimit" parameterType = "long" resultType="guestbookvo">
+		<choose>
+			<when test="_parameter == -1">
+				<![CDATA[
+				select no, name, date_format(reg_date, "%Y/%m/%d %H:%i:%s") as reg_date, message 
+				from guestbook order by no desc limit 0,5
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				select no, name, date_format(reg_date, "%Y/%m/%d %H:%i:%s") as reg_date, message 
+				from guestbook where no<#{startNo} order by no desc limit 0,5
+				]]>
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="findRecentOne" resultType="long">

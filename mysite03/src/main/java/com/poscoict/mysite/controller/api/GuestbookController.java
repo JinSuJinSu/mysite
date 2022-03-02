@@ -32,9 +32,15 @@ public class GuestbookController {
 		return JsonResult.success(vo);
 	}
 	
+//	@GetMapping("/list")
+//	public JsonResult list() {
+//		List<GuestbookVo> list = guestbookService.getMessageList();
+//		return JsonResult.success(list);
+//	}
+	
 	@GetMapping("/list")
-	public JsonResult list() {
-		List<GuestbookVo> list = guestbookService.getMessageList();
+	public JsonResult list(@RequestParam(value="startNo", required=true, defaultValue="-1") Long startNo) {
+		List<GuestbookVo> list = guestbookService.getLimitMessage(startNo);
 		return JsonResult.success(list);
 	}
 	

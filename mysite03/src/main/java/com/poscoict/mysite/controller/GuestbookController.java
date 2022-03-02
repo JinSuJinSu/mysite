@@ -31,7 +31,7 @@ public class GuestbookController {
 	}
 	
 	@RequestMapping({"/spa"})
-	public String spa() {
+	public String spa(Model model) {
 		return "guestbook/index-spa";
 	}
 	

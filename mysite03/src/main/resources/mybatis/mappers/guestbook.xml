@@ -20,6 +20,12 @@
 	]]>
 	</select>
 	
+	<select id="findRecentOne" resultType="long">
+	<![CDATA[
+		select no from guestbook order by no desc limit 1;
+	]]>
+	</select>
+	
 	<select id="selectOne" parameterType="long" resultType="guestbookvo">
 	<![CDATA[
 		select no, password from guestbook where no=#{no}

@@ -18,6 +18,9 @@ public class GuestbookService {
 		return guestbookRepository.findAll();
 	}
 
+	
+	
+	// 방문객 삭제하기
 	public boolean deleteMessage(Long no, String password) {
 		GuestbookVo vo = guestbookRepository.selectOne(no);
 		boolean result=false;
@@ -27,17 +30,18 @@ public class GuestbookService {
 		};
 		return result;
 	}
-
-	// 방명록에 추가할 때 값이 비어있거나 null인 경우 추가를 하면 안된다.
+	
+	// 방명록에 방문객 추가하기
 	public boolean addMessage(GuestbookVo vo) {
-		boolean result=false;
-		if (vo.getName() != null && vo.getPassword() != null && vo.getMessage() != null && !vo.getName().equals("")
-				&& !vo.getPassword().equals("") && !vo.getMessage().equals("")) {
-			guestbookRepository.insert(vo);
-			result=true;		
-		}
-		return result;
-
+		boolean result = guestbookRepository.insert(vo);
+		return result;	
 	}
+	
+	// 최근 방문객 번호 찾기
+	public long getRecentOne() {
+		long no = guestbookRepository.findRecentOne();
+		return no;
+	}
+	
 
 }

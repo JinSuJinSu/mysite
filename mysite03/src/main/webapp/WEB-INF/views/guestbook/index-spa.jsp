@@ -11,6 +11,164 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+let messageBox = function(title, message, callback){
+	$("#dialog-message p").html(message);
+	$("#dialog-message")
+	.attr("title",title)
+	.dialog({
+		width:300,
+		modal: true,
+		buttons: {
+	        "확인": function() {
+	          $(this).dialog("close");
+	        }
+	      },
+		close:callback
+	});
+}
+
+let render = function(vo) {
+	let html = 
+			"<li data-no='" + vo.no + "'>" +
+			"<strong>" + vo.name + "</strong>" +
+			"<p>" + vo.message + "</p>" +
+			"<strong></strong>" +
+			"<a href='' data-no='" + vo.no + "'>삭제</a>" + 
+			"</li>";
+			
+	 return html;		
+}
+
+let fetch = function(){
+	$.ajax({
+		url: '${pageContext.request.contextPath }/api/guestbook/list',
+		type: 'get',
+		dataType: 'json',
+		success: function(response) {
+			console.log(response)
+			if(response.result !== 'success') {
+				console.error(response.message);
+				return;
+			}
+			response.data.forEach(element=>$("#list-guestbook").append(render(element)));
+		}
+	});
+}
+
+$(function(){
+	
+	// 삭제다이얼로그 객체 만들기
+	let dialogDelete = $("#dialog-delete-form").dialog({
+		autoOpen: false,
+		modal: true,
+		buttons: {
+			"삭제": function() {
+				let no = $("#hidden-no").val();
+				let password = $("#password-delete").val();
+				let url = "${pageContext.request.contextPath}/api/guestbook/" + no;
+				
+				$.ajax({
+					url: url,
+					type: 'delete',
+					dataType: 'json',
+					data: "password=" + password,
+					success: function(response) {
+						if(response.result !== 'success') {
+							console.error(response.message);
+							return;
+						}
+						
+						if(response.data == -1) {
+							$(".validateTips.error").show();
+							$("#password-delete").val("").focus();
+							return;
+						}
+						
+						// 삭제가 된 경우
+						$("#list-guestbook li[data-no='"   +  response.data + "']").remove();
+						dialogDelete.dialog('close');
+					}
+				}); 
+			},
+			"취소": function() {
+				$(this).dialog('close');
+			}
+		},
+		close: function() {
+			$(".validateTips.error").hide();
+			$("#password-delete").val("");
+			$("#hidden-no").val("");
+		}
+	});
+	
+	// 글삭제 버튼 Click 이벤트 처리(Live Event)
+	$(document).on('click', "#list-guestbook li a", function(event) {
+		event.preventDefault();
+		let no = $(this).data("no");
+		$("#hidden-no").val(no);
+		dialogDelete.dialog('open');
+	}); 
+	
+	// 최초리스트 가져오기
+	fetch();
+	
+	// 방명록 추가 버튼
+	$("#add-form").submit(function(event) {
+		event.preventDefault();
+		
+		let vo = {};
+		vo.name = $("#input-name").val();
+		vo.password = $("#input-password").val();
+		vo.message = $("#tx-content").val();
+		
+		// 이름 유효성 체크
+		if(vo.name===""){
+			messageBox("방명록","이름은 필수 항목입니다",function(){
+				$("#input-name").focus();
+			})
+			return;
+		}
+		
+		// 비밀번호 유효성 체크
+		if(vo.password===""){
+			messageBox("방명록","비밀번호는 필수 항목입니다",function(){
+				$("#input-password").focus();
+			})
+			return;
+		}
+		
+		// 메시지 유효성 체크
+		if(vo.message===""){
+			messageBox("방명록","메시지는 필수 항목입니다",function(){
+				$("#tx-content").focus();
+			})
+			return;
+		}
+
+		$.ajax({
+			url: '${pageContext.request.contextPath}/api/guestbook',
+			type: 'post',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(vo),
+			success: function(response) {
+				console.log(response)
+				if(response.result !== 'success') {
+					console.error(response.message);
+					return;
+				}
+				
+				let html = render(response.data);
+				$("#list-guestbook").prepend(html);
+			}
+		});
+	});
+	
+
+});
+
+</script>
 </head>
 <body>
 	<div id="container">
@@ -24,39 +182,7 @@
 					<textarea id="tx-content" placeholder="내용을 입력해 주세요."></textarea>
 					<input type="submit" value="보내기" />
 				</form>
-				<ul id="list-guestbook">
-
-					<li data-no=''>
-						<strong>지나가다가</strong>
-						<p>
-							별루입니다.<br>
-							비번:1234 -,.-
-						</p>
-						<strong></strong>
-						<a href='' data-no=''>삭제</a> 
-					</li>
-					
-					<li data-no=''>
-						<strong>둘리</strong>
-						<p>
-							안녕하세요<br>
-							홈페이지가 개 굿 입니다.
-						</p>
-						<strong></strong>
-						<a href='' data-no=''>삭제</a> 
-					</li>
-
-					<li data-no=''>
-						<strong>주인</strong>
-						<p>
-							아작스 방명록 입니다.<br>
-							테스트~
-						</p>
-						<strong></strong>
-						<a href='' data-no=''>삭제</a> 
-					</li>
-					
-									
+				<ul id="list-guestbook">									
 				</ul>
 			</div>
 			<div id="dialog-delete-form" title="메세지 삭제" style="display:none">

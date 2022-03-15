@@ -12,6 +12,7 @@
 		<module>mysite04</module>
 		<module>mysite05</module>
 		<module>mysite06</module>
+		<module>mysite07</module>
 	</modules>
 
 	<properties>

@@ -39,8 +39,8 @@ spring:
          on-profile: dev
 
    datasource:
-      driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mysql://192.168.0.206:3307/webdb?characterEncoding=UTF-8&serverTimezone=UTC
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://192.168.0.206:5432/webdb?characterEncoding=UTF-8&serverTimezone=UTC
       username: webdb
       password: webdb
       hikari:
@@ -55,8 +55,8 @@ spring:
          on-profile: production
 
    datasource:
-      driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mysql://211.14.5.6:3307/webdb?characterEncoding=UTF-8&serverTimezone=UTC
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://211.14.5.6:5432/webdb?characterEncoding=UTF-8&serverTimezone=UTC
       username: webdb
       password: adfasdfewra@sdfsdf
       hikari:
@@ -68,7 +68,7 @@ spring:
 server:
    port: 8080
    servlet:
-      context-path: /mysite06
+      context-path: /mysite07
       encoding:
          charset: utf-8
          enabled: true

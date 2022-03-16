@@ -13,6 +13,7 @@
 		<module>mysite05</module>
 		<module>mysite06</module>
 		<module>mysite07</module>
+		<module>mysite08</module>
 	</modules>
 
 	<properties>

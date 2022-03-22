@@ -137,18 +137,6 @@
 					<password>manager</password>
 				</configuration>
 			</plugin>
-			
-			<!-- web.xml 없을 때 필요한 플러그인 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.2.1</version>
-				<configuration>
-					<warSourceDirectory>${project.basedir}/src/main/webapp</warSourceDirectory>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
-			
 		</plugins>
 	</build>	
 	

@@ -27,5 +27,10 @@ public class UserController {
 	public String check() {
 		return "연동을 테스트해야 합니다";
 	}
+	
+	@GetMapping("/react")
+	public String reacgt() {
+		return "react가 진짜 제대로 됩니까???";
+	}
 
 }

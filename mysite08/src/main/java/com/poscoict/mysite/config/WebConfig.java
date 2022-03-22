@@ -122,7 +122,7 @@ public class WebConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/guestbook/**").allowCredentials(true).allowedOrigins("http://localhost:9090");
+		registry.addMapping("/mysite08/**").allowCredentials(true).allowedOrigins("http://localhost:9090");
 	}
 	
 

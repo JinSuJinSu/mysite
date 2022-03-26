@@ -13,7 +13,9 @@ public class SiteService {
 	private SiteRepository siteRepository;
 	
 	public SiteVo getAdmin(){
+		System.out.println("사이트 진입 성공");
 		SiteVo vo = siteRepository.findAdmin();
+		System.out.println("사이트 작동 성공");
 		return vo;
 	}
 	

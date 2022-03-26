@@ -23,7 +23,7 @@
 
 	<insert id="insert" parameterType="uservo">
 		<![CDATA[
-		insert into users values(default, #{name}, #{email}, #{password}, now(), #{gender}, 'USER')
+		insert into users values(default, #{name}, #{email}, #{password}, #{gender}, now(), 'USER')
 		]]>
 	</insert>
 	<update id="update" parameterType="uservo">

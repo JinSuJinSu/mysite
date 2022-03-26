@@ -32,6 +32,7 @@
 	]]>
 	</select>
 	
+	
 	<!-- 글 쓰기 -->
 	<insert id="insert" parameterType="boardvo">
 	<![CDATA[

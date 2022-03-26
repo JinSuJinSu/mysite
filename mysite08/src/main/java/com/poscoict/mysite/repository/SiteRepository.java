@@ -14,7 +14,9 @@ public class SiteRepository {
 	
 	// admin 유저를 찾는다.
 	public SiteVo findAdmin() {
+		System.out.println("레파지토리진입성공");
 		SiteVo vo=sqlSession.selectOne("site.findAdmin");
+		System.out.println("레파지토리 작동 성공");
 		return vo;
 	}
 	

@@ -120,10 +120,10 @@ public class WebConfig implements WebMvcConfigurer {
         .addResourceLocations(env.getProperty("css.resourceLocations"));
 	}
 	
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/mysite08/**").allowCredentials(true).allowedOrigins("http://localhost:9090");
-	}
+//	@Override
+//	public void addCorsMappings(CorsRegistry registry) {
+//		registry.addMapping("/mysite08/**").allowCredentials(true).allowedOrigins("http://localhost:9090");
+//	}
 	
 
 }

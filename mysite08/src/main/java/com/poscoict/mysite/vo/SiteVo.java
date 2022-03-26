@@ -2,17 +2,17 @@ package com.poscoict.mysite.vo;
 
 public class SiteVo {
 	
-	private long no;
+	private int no;
 	private String title;
 	private String welcome;
 	private String profile;
 	private String descrpition;
 	
 	
-	public long getNo() {
+	public int getNo() {
 		return no;
 	}
-	public void setNo(long no) {
+	public void setNo(int no) {
 		this.no = no;
 	}
 	public String getTitle() {
